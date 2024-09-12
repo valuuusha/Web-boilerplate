@@ -24,7 +24,7 @@
             <img src="\src\images\title.png" alt="Teachfinder">
          </a>
 
-         <nav>
+         <nav class="page-nav">
             <ul>
                <li><a href="#">Teachers</a></li>
                <li><a href="#">Statistics</a></li>
@@ -35,16 +35,17 @@
 
          <form>
             <input type="text" placeholder="Name, note or age to search">
-            <button>Search</button>
+            <button class="search">Search</button>
          </form>
 
-         <button>Add teacher</button>
+         <button class="add-teacher">Add teacher</button>
       </header>
 
-      <section>
+      <section class="top-teacherss">
 
          <hr/>
          <h2>Top Teachers</h2>
+
          <div class="filters">
 
             <label>Age:</label>
@@ -78,7 +79,7 @@
 
             <article class="teacher-card">
                <img src="\src\images\photo_1.png">
-               <h3>Ihor Tlachuk</h3>
+               <h3>Ihor Tkachuk</h3>
                <h4>Chemistry</h4>
                <h5>Ukraine</h5>
             </article>
@@ -134,12 +135,11 @@
          </section>
       </section>
 
-      <section>
+      <section class="statistics">
          <hr/>
          <h2>Statistics</h2>
      
          <table>
-
             <thead>
                <tr>
                   <th>Name</th>
@@ -233,9 +233,19 @@
                </tr>
             </tbody>
          </table>
+
+         <nav class="table-nav">
+            <ul>
+               <li><a href="#">1</a></li>
+               <li><a href="#">2</a></li>
+               <li><a href="#">3</a></li>
+               <li><a href="#">...</a></li>
+               <li><a href="#">Last</a></li>
+            </ul>
+         </nav>
       </section>
 
-      <section>
+      <section class="favourites">
          <hr/>
          <h2>Favourites</h2>
      
@@ -277,7 +287,7 @@
          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam eligendi illum in inventore ipsum odio officiis omnis quisquam sed tempora?</p>
          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A atque esse expedita id iusto mollitia, odit sint ullam veritatis vero?</p>
          
-         <nav>
+         <nav class="page-nav">
              <ul>
                  <li><a href="#">Teachers</a></li>
                  <li><a href="#">Statistics</a></li>
@@ -286,7 +296,7 @@
              </ul>
          </nav>
  
-         <button>Add teacher</button>
+         <button class="add-teacher">Add teacher</button>
      </footer>
   </body>
 </html>
