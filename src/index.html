@@ -19,29 +19,34 @@
       <script type="text/javascript" src="../build/app.js"></script>
 
       <header>
+         <div class="upper-header">
+            <a class="title" href="#">
+               <img src="\src\images\title.png" alt="Teachfinder">
+            </a>
 
-         <a href="#">
-            <img src="\src\images\title.png" alt="Teachfinder">
-         </a>
+            <form>
+               <input type="text" placeholder="Name, note or age to search">
+               <button class="search">Search</button>
+            </form>
+         </div>
 
-         <nav class="page-nav">
-            <ul>
-               <li><a href="#">Teachers</a></li>
-               <li><a href="#">Statistics</a></li>
-               <li><a href="#">Favorites</a></li>
-               <li><a href="#">About</a></li>
-            </ul>
-         </nav>
+         <div class="low-header">
+            <nav class="page-nav">
+               <ul>
+                  <li><a href="#">Teachers</a></li>
+                  <li><a href="#">Statistics</a></li>
+                  <li><a href="#">Favorites</a></li>
+                  <li><a href="#">About</a></li>
+               </ul>
+            </nav>
 
-         <form>
-            <input type="text" placeholder="Name, note or age to search">
-            <button class="search">Search</button>
-         </form>
+            <button class="add-teacher">Add teacher</button>
 
-         <button class="add-teacher">Add teacher</button>
+         </div>
+
       </header>
 
-      <section class="top-teacherss">
+      <section class="top-teachers">
 
          <hr/>
          <h2>Top Teachers</h2>
@@ -268,13 +273,13 @@
          </article>
      
          <article class="teacher_card">
-            <img src="\src\images\photo_5_2.png"\>
+            <img src="\src\images\photo_5.png"\>
             <h3>Ari Tang</h3>
             <h5>China</h5>
          </article>
      
          <article class="teacher_card">
-            <img src="\src\images\photo_3_2.png"\>
+            <img src="\src\images\photo_3.png"\>
             <h3>Floor Jansen</h3>
             <h5>Denmark</h5>
          </article>
@@ -287,16 +292,18 @@
          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam eligendi illum in inventore ipsum odio officiis omnis quisquam sed tempora?</p>
          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A atque esse expedita id iusto mollitia, odit sint ullam veritatis vero?</p>
          
-         <nav class="page-nav">
+         <div clas="lower">
+            <nav class="page-nav">
              <ul>
-                 <li><a href="#">Teachers</a></li>
-                 <li><a href="#">Statistics</a></li>
-                 <li><a href="#">Favorites</a></li>
-                 <li><a href="#">About</a></li>
-             </ul>
-         </nav>
- 
-         <button class="add-teacher">Add teacher</button>
+                  <li><a href="#">Teachers</a></li>
+                  <li><a href="#">Statistics</a></li>
+                  <li><a href="#">Favorites</a></li>
+                  <li><a href="#">About</a></li>
+               </ul>
+            </nav>
+   
+            <button class="add-teacher">Add teacher</button>
+         </div>
      </footer>
   </body>
 </html>
