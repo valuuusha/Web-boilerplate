@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head temscope itemtype="http://schema.org/WebSite">
+
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Add Teacher</title>
+        <style>
+
+            body {
+                font-family: Roboto, sans-serif;
+                background-color: rgba(0, 0, 0, 0.6);
+            }
+
+            .wrapper {
+                width: 30vw;
+                margin: 10vh auto;
+                background-color: white;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+            .add-teacher-label {
+                font-size: 1.2vw;
+                background-color: #464547;
+                height: 3vw;
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 1vw;
+                padding-left: 1vw;
+                padding-right: 1vw;
+
+            }
+
+            .add-teacher-label a {
+                background-color: #464547;
+                color: white;
+                border: none;
+                text-decoration: none;
+                font-size: 1.5vw;
+            }
+
+            form {
+                display: grid;
+                padding: 1vw;
+                grid-template-columns: 1fr 1fr;
+                gap: 1vw;
+            }
+
+            form label {
+                display: block;
+                font-size: 0.9vw;
+                color: #555;
+                margin-bottom: 0.3vw;
+            }
+
+            form input, form select, form textarea {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0.5vw;
+                border: 1px solid #ccc;
+                font-size: 0.9vw;
+            }
+
+            form select {
+                background-color: white;
+            }
+
+            .name {
+                grid-column: 1 / 3;
+            }
+
+            .speciality {
+                grid-column: 1 / 3;
+            }
+
+            .country,
+            .city {
+                grid-column: span 1;
+            }
+
+            .email,
+            .phone{
+                grid-column: span 1;
+            }
+            
+            .birthdate {
+                grid-column: 1 / 2;
+            }
+
+            .sex,
+            .bgcolor {
+                grid-column: 1 / 2;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 0.9vw;
+            }
+
+            .sex input {
+                margin-right: 0.5vw;
+            }
+            .sex-options {
+                display: flex;
+                align-items: center;
+            }
+
+            .bgcolor input {
+                width: 4vw;
+                height: 1.8vw;
+            }
+
+            .notes {
+                grid-column: 1 / span 2;
+            }
+
+            textarea {
+                height: 3vw;
+                resize: none;
+            }
+
+            .notes textarea {
+                height: 6vw;
+            }
+
+            .wrapper button {
+                grid-column: 1 / span 2;
+                width: 100%;
+                padding: 0.8vw;
+                background-color: white;
+                border: 1px solid #f75c49;
+                color: #f75c49;
+                font-size: 1.2vw;
+                cursor: pointer;
+            }
+
+            .wrapper button:hover {
+                background-color: #f75c49;
+                color:white
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+
+            <div class="add-teacher-label">
+                <label for="wrapper">Add Teacher</label>
+                <a href="index.html">×</a>
+            </div>
+
+            <form>
+
+                <div class="name">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Enter name">
+                </div>
+
+                <div class="speciality">
+                    <label for="speciality">Speciality</label>
+                    <select id="speciality">
+                        <option value="mathematics">Mathematics</option>
+                        <option value="chess">Chess</option>
+                        <option value="vocal">Vocal</option>
+                        <option value="computer science">Computer Science</option>
+                        <option value="biologe">Biology</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                    </select>
+                </div>
+
+                <div class="country">
+                    <label for="country">Country</label>
+                    <select id="country">
+                        <option value="ukraine">Ukraine</option>
+                        <option value="usa">USA</option>
+                        <option value="denmark">Denmark</option>
+                        <option value="china">China</option>
+                        <option value="india">India</option>
+                    </select>
+                </div>
+
+                <div class="city">
+                    <label for="city">City</label>
+                    <input type="text" id="city">
+                </div>
+
+                <div class="email">
+                    <label for="email">Email</label>
+                    <input type="email" id="email">
+                </div>
+
+                <div class="phone">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone">
+                </div>
+
+                <div class="birthdate">
+                    <label for="birthdate">Date of birth</label>
+                    <input type="date" id="birthdate">
+                </div>
+
+                <div class="sex">
+                    <label>Sex</label>
+
+                    <div class="sex-options">
+                        <label for="male">Male</label>
+                        <input type="radio" id="male" name="sex">
+                        <label for="female">Female</label>
+                        <input type="radio" id="female" name="sex">
+                    </div>
+                </div>
+
+                <div class="bgcolor">
+                    <label for="bgcolor">Background color</label>
+                    <input type="color" id="bgcolor">
+                </div>
+
+                <div class="notes">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes"></textarea>
+                </div>
+
+                <button class="button">Add</button>
+            </form>
+        </div>
+
+    </body>
+
+</html>
