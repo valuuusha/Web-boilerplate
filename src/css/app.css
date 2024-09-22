@@ -24,6 +24,9 @@ body {
     align-items: center;
 }
 
+.upper-header img {
+    width: 20vw;
+}
 .low-header{
     display: flex;
     padding: 1vw 0;
@@ -36,18 +39,21 @@ body {
     width: 12vw;
     border: 1px solid gray;
     border-radius: 0;
+    box-sizing: border-box;
+    font-size: 0.8vw;
 }
 
 button.search {
-    width: 5vw;
+    width: 5.5vw;
     background-color: #ffffff;
     color: #ff4b4b;
     border: 1px solid #ff4b4b;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 0.9vw;
 }
 
 .search-input, .button.search {
+    padding-left: 0.5vw;
     height: 2.2vw;
 }
 
@@ -59,13 +65,13 @@ form {
 
 
 button.add-teacher {
-    width: 8vw;
+    width: 8.5vw;
     height: 3vw;
     justify-content: right;
     background-color: #ffffff;
     border: 1px solid #f75c49;
     color: #f75c49;
-    font-size: 17px;
+    font-size: 1.2vw;
     font-weight: 500;
 }
 
@@ -115,7 +121,8 @@ hr{
 .filters {
     display: flex;
     justify-content: left;
-    gap: 1vw
+    gap: 1rem;
+    flex-wrap: wrap; 
     
 }
 
@@ -204,6 +211,7 @@ table{
     margin-right: auto;
     margin-top: 2vw;
     margin-bottom: 2vw;
+    font-size: 1.1vw;
 }
 th, td {
     border: 1px solid #ddd; 
@@ -224,6 +232,12 @@ th, td {
 .table-nav a {
     color: #333;
     padding: 1vw;
+    font-size: 1.2vw;
+}
+
+.favourites .teachers{
+    display: flex;
+    justify-content: center;
 }
 
 footer, header {
@@ -232,4 +246,18 @@ footer, header {
 p {
     text-align: left;
     margin-block: 1vw;
+    font-size: 1vw;
+}
+
+@media (max-width: 768px) {
+
+    .upper-header img {
+        width: 30vw;
+    }
+
+
+    .indent {
+        width: 90vw;
+        margin: auto;
+    }
 }
