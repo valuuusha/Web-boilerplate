@@ -14,9 +14,12 @@ body {
 
 .indent{
     width: 66vw;
-    margin: auto;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #ffffff;
-    border: 0.1vw solid gray;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .upper-header{
@@ -240,8 +243,12 @@ th, td {
     justify-content: center;
 }
 
-footer, header {
+footer {
     margin: 2vw;
+}
+
+header {
+    padding: 1vw;
 }
 p {
     text-align: left;
