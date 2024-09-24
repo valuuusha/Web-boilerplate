@@ -1,6 +1,7 @@
 import { randomUserMock } from './FE4U-Lab2-mock.js';
 import { additionalUsers } from './FE4U-Lab2-mock.js';
 import fs from 'fs';
+import path from 'path';
 
 function formatUsers(user) {
   return {
@@ -95,5 +96,6 @@ function writeToFile(fileName, data) {
     console.log('');
   });
 }
+const filePath = path.join('src','results','mergedUsers.json');
 
-writeToFile('mergedUsers.json', allUsers);
+writeToFile(filePath, allUsers);
