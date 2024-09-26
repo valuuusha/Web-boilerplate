@@ -82,20 +82,4 @@ function mergeUsers(formattedUsers, additionalUsers) {
   return mergedUsers;
 }
 
-const allUsers = mergeUsers(finalUsers, additionalUsers);
-
-function writeToFile(fileName, data) {
-
-  const jsonData = JSON.stringify(data, null, 2);
-  
-  fs.writeFile(fileName, jsonData, 'utf8', (err) => {
-    if (err) {
-      console.error('', err);
-      return;
-    }
-    console.log('');
-  });
-}
-const filePath = path.join('src','results','mergedUsers.json');
-
-writeToFile(filePath, allUsers);
+export const allUsers = mergeUsers(finalUsers, additionalUsers);

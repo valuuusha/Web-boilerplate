@@ -38,9 +38,9 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0"
   },
-  
   "dependencies": {
-    "libphonenumber-js": "^1.11.8"
+    "i18n-iso-countries": "^7.12.0",
+    "libphonenumber-js": "^1.11.9"
   },
-  "type": "module"  
+  "type": "module"
 }
