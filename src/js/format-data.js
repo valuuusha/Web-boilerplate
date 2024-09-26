@@ -83,3 +83,5 @@ function mergeUsers(formattedUsers, additionalUsers) {
 }
 
 export const allUsers = mergeUsers(finalUsers, additionalUsers);
+
+// console.log(allUsers);
