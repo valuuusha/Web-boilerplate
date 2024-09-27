@@ -1,6 +1,6 @@
-import { allUsers } from './format-data.js';
+import { validUsers } from './validate-data.js';
 
-function filterUsers(users, filterParams) {
+export function filterUsers(users, filterParams) {
     return users.filter(user => {
         return (
             (!filterParams.country || user.country === filterParams.country) &&
@@ -18,6 +18,6 @@ const filterParams = {
     favorite: false
 };
 
-const filteredUsers = filterUsers(allUsers, filterParams);
+const filteredUsers = filterUsers(validUsers, filterParams);
 
 console.log(filteredUsers);

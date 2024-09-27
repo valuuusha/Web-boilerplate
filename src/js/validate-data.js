@@ -46,12 +46,11 @@ function validateNoteField(note) {
     if (note === null) {
         return true;
     }
-    return typeof note === 'string' && /^[A-Z][a-zA-Z\s]*$/.test(note);
+    return typeof note === 'string' && /^[A-Z][a-zA-Z\s.,!?'"()-]*$/.test(note);
 }
 
 
-
-function validateUser(user) {
+export function validateUser(user) {
     let isValid = true;
 
     isValid &&= validateFullName(user.full_name);
@@ -69,7 +68,10 @@ function validateUser(user) {
 
 const validationResults = allUsers.map(user => ({
     user,
-    isValid: validateUser(user)
+    isValid: validateUser(user),
 }));
 
-console.log(validationResults);
+export const validUsers = allUsers.filter(user => validateUser(user));
+
+// console.log(validationResults);
+// console.log(validUsers);

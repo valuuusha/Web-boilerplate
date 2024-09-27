@@ -1,9 +1,8 @@
 import { randomUserMock } from './FE4U-Lab2-mock.js';
 import { additionalUsers } from './FE4U-Lab2-mock.js';
-import fs from 'fs';
-import path from 'path';
 
-function formatUsers(user) {
+
+export function formatUsers(user) {
   return {
     gender: user.gender,
     title: user.name.title,
