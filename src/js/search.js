@@ -23,3 +23,32 @@ const searchVal = "Elias";
 
 const foundUsers = searchAllUsers(validUsers, searchParam, searchVal);
 console.log(foundUsers);
+
+function calculatePercentage(users, searchField, condition) {
+    const matchingUsers = users.filter(user => {
+        const val = user[searchField]; 
+
+        if (typeof val === 'string') {
+            return condition(val.toLowerCase());
+        }
+
+        return condition(val);
+    });
+    
+    const totalUsersNum = users.length;
+    const matchingNum = matchingUsers.length; 
+    return parseFloat(((matchingNum / totalUsersNum) * 100).toFixed(1));
+}
+
+// const matchParam = "age"
+// const condition = val => val => 35;
+// const condition = val => val < 35;
+
+// const matchParam = "country"
+// const condition = val => val === 'germany'; 
+
+const matchParam = "course"
+const condition = val => val === 'mathematics'; 
+
+const percentage = calculatePercentage(validUsers, matchParam, condition);
+console.log(percentage);
