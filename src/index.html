@@ -8,7 +8,7 @@
       <meta name="msapplication-tap-highlight" content="no">
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      <title>Project</title>
+      <title>Teachfinder</title>
 
       <link rel="stylesheet" href="./css/app.css">
 
@@ -17,6 +17,313 @@
    <body itemscope itemtype="http://schema.org/WebPage">
 
       <script type="text/javascript" src="../build/app.js"></script>
+      <div class="indent">
+         <header>
+            <div class="upper-header">
+               <a class="title" href="#">
+                  <img src="\src\images\title.png" alt="Teachfinder">
+               </a>
+
+               <form>
+                  <input class="search-input" type="text" placeholder="Name, note or age to search">
+                  <button class="search">Search</button>
+               </form>
+            </div>
+
+            <div class="low-header">
+               <nav class="page-nav">
+                  <ul>
+                     <li><a href="#">Teachers</a></li>
+                     <li><a href="#">Statistics</a></li>
+                     <li><a href="#">Favorites</a></li>
+                     <li><a href="#">About</a></li>
+                  </ul>
+               </nav>
+
+               <button class="add-teacher">Add teacher</button>
+
+            </div>
+
+         </header>
+
+         <hr/>
+
+         <section class="top-teachers">
+
+            <h2>Top Teachers</h2>
+
+            <div class="filters">
+
+               <form class="classification">
+
+                  <label>Age</label>
+
+                  <select>
+                     <option>18-31</option>
+                     <option>32-51</option>
+                  </select>
+               </form>
+
+               <form class="classification">
+
+                  <label>Region</label>
+
+                  <select>
+                     <option>Europe</option>
+                     <option>Asia</option>
+                     <option>Africa</option>
+                     <option>North America</option>
+                     <option>South America</option>
+                     <option>Australia</option>
+                  </select>
+               </form>
+
+               <form class="classification">
+
+                  <label class>Sex</label>
+
+                  <select>
+                     <option>Male</option>
+                     <option>Female</option>
+                  </select>
+               </form>
+
+               <label><input type="checkbox"> Only with photo</label>
+
+               <label><input type="checkbox"> Only favorites</label>
+            </div>
+            
+            <section class="teachers">
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_1.png"\>
+                  <h3>Ihor Tkachuk</h3>
+                  <h4>Chemistry</h4>
+                  <h5>Ukraine</h5>
+               </article>
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_2.png"\>
+                  <h3>Pragg Rameshbabu</h3>
+                  <h4>Chess</h4>
+                  <h5>India</h5>
+               </article>
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_3.png"\>
+                  <h3>Floor Jansen</h3>
+                  <h4>Vocal</h4>
+                  <h5>Denmark</h5>
+               </article>
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_4.png"\>
+                  <h3>John Burke</h3>
+                  <h4>Computer Science</h4>
+                  <h5>Belgium</h5>
+               </article>
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_5.png"\>
+                  <h3>Ari Tang</h3>
+                  <h4>Biology</h4>
+                  <h5>China</h5>
+               </article>
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_6.png"\>
+                  <h3>Rachel Andrew</h3>
+                  <h4>Medicine</h4>
+                  <h5>UK</h5>
+               </article>
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_7.png"\>
+                  <h3>Anna Muzychuk</h3>
+                  <h4>Chess</h4>
+                  <h5>Belarus</h5>
+               </article>
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_8.png"\>
+                  <h3>Radoslaw Ljuboevic</h3>
+                  <h4>Physics</h4>
+                  <h5>Poland</h5>
+               </article>
+            </section>
+         </section>
+
+         <hr/>
+
+         <section class="statistics">
+            <h2>Statistics</h2>
       
+            <table>
+               <thead>
+                  <tr>
+                     <th>Name</th>
+                     <th>Speciality</th>
+                     <th>Age</th>
+                     <th>Gender</th>
+                     <th>Nationality</th>
+                  </tr>
+               </thead>
+
+               <tbody>
+
+                  <tr>
+                     <td>Daisy Alexander</td>
+                     <td>Chemistry</td>
+                     <td>28</td>
+                     <td>Female</td>
+                     <td>Vietnam</td>
+                  </tr>
+
+                  <tr>
+                     <td>Julia Bradley</td>
+                     <td>Math</td>
+                     <td>26</td>
+                     <td>Female</td>
+                     <td>USA</td>
+                  </tr>
+
+                  <tr>
+                     <td>Rita Hart</td>
+                     <td>Art</td>
+                     <td>41</td>
+                     <td>Female</td>
+                     <td>Ireland</td>
+                  </tr>
+
+                  <tr>
+                     <td>Jonathan Jacobs</td>
+                     <td>Math</td>
+                     <td>32</td>
+                     <td>Male</td>
+                     <td>England</td>
+                  </tr>
+
+                  <tr>
+                     <td>Nathaniel White</td>
+                     <td>Computer Science</td>
+                     <td>37</td>
+                     <td>Male</td>
+                     <td>Austria</td>
+                  </tr>
+
+                  <tr>
+                     <td>Frank Medina</td>
+                     <td>English</td>
+                     <td>43</td>
+                     <td>Male</td>
+                     <td>Italy</td>
+                  </tr>
+
+                  <tr>
+                     <td>Ella Curtis</td>
+                     <td>Chess</td>
+                     <td>34</td>
+                     <td>Female</td>
+                     <td>USA</td>
+                  </tr>
+
+                  <tr>
+                     <td>Claire Simmmons</td>
+                     <td>Art</td>
+                     <td>38</td>
+                     <td>Female</td>
+                     <td>Netherlands</td>
+                  </tr>
+
+                  <tr>
+                     <td>Ella Curtis</td>
+                     <td>Biology</td>
+                     <td>44</td>
+                     <td>Male</td>
+                     <td>Scotland</td>
+                  </tr>
+                  
+                  <tr>
+                     <td>Claire Simmmons</td>
+                     <td>Statistics</td>
+                     <td>36</td>
+                     <td>Female</td>
+                     <td>France</td>
+                  </tr>
+               </tbody>
+            </table>
+
+            <nav class="table-nav">
+               <ul>
+                  <li><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">...</a></li>
+                  <li><a href="#">Last</a></li>
+               </ul>
+            </nav>
+         </section>
+
+         <hr/>
+
+         <section class="favourites">
+            <h2>Favourites</h2>
+
+            <section class="teachers">
+
+               <article class="teacher-card">
+                  <img src="\src\images\photo_1.png"\>
+                  <h3>Ihor Tlachuk</h3>
+                  <h5>Ukraine</h5>
+               </article>
+         
+               <article class="teacher-card">
+                  <img src="\src\images\photo_7.png"\>
+                  <h3>Anna Makarevich</h3>
+                  <h5>Belarus</h5>
+               </article>
+         
+               <article class="teacher-card">
+                  <img src="\src\images\photo_4.png"\>
+                  <h3>John Burke</h3>
+                  <h5>Belgium</h5>
+               </article>
+         
+               <article class="teacher-card">
+                  <img src="\src\images\photo_5.png"\>
+                  <h3>Ari Tang</h3>
+                  <h5>China</h5>
+               </article>
+         
+               <article class="teacher-card">
+                  <img src="\src\images\photo_3.png"\>
+                  <h3>Floor Jansen</h3>
+                  <h5>Denmark</h5>
+               </article>
+            </section>
+         </section>
+
+         <hr/>
+
+         <footer>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A atque facere, hic impedit itaque molestiae sit tempore? Ea in mollitia natus rerum voluptates. Ea ex excepturi facere tempora. Aliquid asperiores hic impedit iusto natus quaerat ratione sit? Culpa lusto optio voluptas voluptate. Enim eveniet fugit iure maiores molestiae, praesentium quia.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam eligendi illum in inventore ipsum odio officiis omnis quisquam sed tempora?</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A atque esse expedita id iusto mollitia, odit sint ullam veritatis vero?</p>
+            
+            <div class="low-header">
+               <nav class="page-nav">
+               <ul>
+                     <li><a href="#">Teachers</a></li>
+                     <li><a href="#">Statistics</a></li>
+                     <li><a href="#">Favorites</a></li>
+                     <li><a href="#">About</a></li>
+                  </ul>
+               </nav>
+      
+               <button class="add-teacher">Add teacher</button>
+            </div>
+      </footer>
+   </div>
   </body>
 </html>

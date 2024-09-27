@@ -3,3 +3,268 @@
 
 /* Reset and normalize */
 @import url('./normalize.css');
+
+/* Reset and normalize */
+@import url('./normalize.css');
+
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: #ffffff;
+}
+
+.indent{
+    width: 66vw;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.upper-header{
+    display: flex;
+    align-items: center;
+}
+
+.upper-header img {
+    width: 20vw;
+}
+.low-header{
+    display: flex;
+    padding: 1vw 0;
+    margin-top: 2vw;
+    margin-bottom: 1vw;
+    justify-content: space-between;
+}
+
+.search-input {
+    width: 12vw;
+    border: 1px solid gray;
+    border-radius: 0;
+    box-sizing: border-box;
+    font-size: 0.8vw;
+}
+
+button.search {
+    width: 5.5vw;
+    background-color: #ffffff;
+    color: #ff4b4b;
+    border: 1px solid #ff4b4b;
+    font-weight: 500;
+    font-size: 0.9vw;
+}
+
+.search-input, .button.search {
+    padding-left: 0.5vw;
+    height: 2.2vw;
+}
+
+form {
+    display: flex;
+    gap: 1vw;
+    margin-left: auto;
+}
+
+
+button.add-teacher {
+    width: 8.5vw;
+    height: 3vw;
+    justify-content: right;
+    background-color: #ffffff;
+    border: 1px solid #f75c49;
+    color: #f75c49;
+    font-size: 1.2vw;
+    font-weight: 500;
+}
+
+button.search:hover, button.add-teacher:hover {
+    background-color: #f75c49;
+    color: #ffffff;
+}
+
+hr{
+    width: 25vw;
+    margin: auto;
+    background-color:#000000
+}
+
+.page-nav{
+    width: 35vw;
+    display: flex;
+}
+
+.page-nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 2vw;
+}
+
+.page-nav a {
+    text-decoration: none;
+    color: #f75c49;
+    font-weight: bold;
+    font-size: 1.2vw;
+}
+
+
+.top-teachers {
+    margin: 2vw;
+}
+
+.top-teachers h2, .statistics h2, .favourites h2{
+    font-size: 1.8vw;
+    font-weight: 250;
+    color: #000000;
+    margin-bottom: 1.5vw;
+    padding-bottom: 0.5vw;
+}
+
+.filters {
+    display: flex;
+    justify-content: left;
+    gap: 1rem;
+    flex-wrap: wrap; 
+    
+}
+
+.classification {
+    margin: 0;
+    gap: 0;
+}
+
+.filters label{
+    color: #999999;
+    font-size: 1vw;
+    margin-right: 1vw;
+    margin-top: 0.8vw;
+} 
+
+.filters select {
+    padding: 0.6vw;
+    border: 0.1vw solid #000000;
+    background-color: #ffffff;
+    font-size: 1vw;
+}
+
+.filters .classification:not(:first-child) {
+    margin-left: 1vw; /
+}
+
+.teachers{
+    display: flex;
+    gap: 2vw;
+    flex-wrap: wrap;
+    margin-top: 2vw;
+}
+
+.teacher-card {
+    text-align: center;
+    width: 10vw;
+}
+
+.teacher-card img, .favourites img {
+    width: 8vw;
+    height: 8vw;
+    border: 0.3vw solid #f99589;
+    border-radius: 50%;
+}
+
+.teacher-card img:hover, .favourites img:hover {
+    border-color: #cc4836;
+}
+
+.teacher-card h3 {
+    font-weight: 500;
+    font-size: 1.2vw;
+    margin: 0.8vw;
+}
+
+.teacher-card h4 {
+    font-size: 0.9vw;
+    padding: 0.5vw;
+    color: gray;
+}
+
+.teacher-card h5 {
+    font-size: 0.7vw;
+
+}
+
+.statistics, .favourites{
+    margin: 2vw;;
+}
+
+.statistics table {
+    border-collapse: collapse;
+}
+
+.statistics th, .statistics td {
+    padding: 1vw;
+    text-align: center;
+}
+.statistics th {
+    border-bottom: 1vw #000000;
+}
+
+table{
+    width: 60vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+    font-size: 1.1vw;
+}
+th, td {
+    border: 1px solid #ddd; 
+    text-align: center;
+}
+
+.table-nav ul {
+    display: flex;
+    gap: 0.5vw; 
+    list-style: none; 
+    margin-left: 0.6vw;
+}
+
+.table-nav li {
+    display: flex;
+}
+
+.table-nav a {
+    color: #333;
+    padding: 1vw;
+    font-size: 1.2vw;
+}
+
+.favourites .teachers{
+    display: flex;
+    justify-content: center;
+}
+
+footer {
+    margin: 2vw;
+}
+
+header {
+    padding: 1vw;
+}
+p {
+    text-align: left;
+    margin-block: 1vw;
+    font-size: 1vw;
+}
+
+@media (max-width: 768px) {
+
+    .upper-header img {
+        width: 30vw;
+    }
+
+
+    .indent {
+        width: 90vw;
+        margin: auto;
+    }
+}
