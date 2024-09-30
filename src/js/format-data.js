@@ -31,9 +31,9 @@ function addFields(user) {
   return {
     ...user,
     id: user.id || generateRandomId(),
-    favorite: false,
+    favorite: Math.random() < 0.5,
     course: getRandomCourse(),
-    bg_color: getRandomColor(), 
+    bg_color: getRandomColor(),
     note: "Notes..."
   };
 }

@@ -1,7 +1,7 @@
 import { allUsers } from './format-data.js';
-import { isValidNumber } from 'libphonenumber-js';
-import countries from 'i18n-iso-countries';
-import enLocale from 'i18n-iso-countries/langs/en.json' assert { type: 'json' };
+// import { isValidNumber } from 'libphonenumber-js';
+// import countries from 'i18n-iso-countries';
+// import enLocale from 'i18n-iso-countries/langs/en.json' assert { type: 'json' };
 
 function validateStringField(field) {
     return typeof field === 'string' && field[0] === field[0].toUpperCase();
@@ -14,7 +14,7 @@ function validateFullName(fullName) {
 
 function validateGender(gender) {
     const validGenders = ['male', 'female'];
-    return validGenders.includes(gender.toLowerCase());
+    return validGenders.includes(gender.toLocaleLowerCase());
 }
 
 function validateAgeField(age) {
@@ -26,21 +26,21 @@ function validateEmail(email) {
     return emailRegex.test(email);
 }
 
-countries.registerLocale(enLocale);
+// countries.registerLocale(enLocale);
 
-function getCountryCodeByName(countryName) {
-    return countries.getAlpha2Code(countryName, 'en');
-}
+// function getCountryCodeByName(countryName) {
+//     return countries.getAlpha2Code(countryName, 'en');
+// }
 
-function validatePhoneNum(phoneNum, country) {
-    const countryCode = getCountryCodeByName(country);
+// function validatePhoneNum(phoneNum, country) {
+//     const countryCode = getCountryCodeByName(country);
 
-    if (!countryCode) {
-        return false;
-    }
+//     if (!countryCode) {
+//         return false;
+//     }
 
-    return isValidNumber(phoneNum, countryCode);
-}
+//     return isValidNumber(phoneNum, countryCode);
+// }
 
 function validateNoteField(note) {
     if (note === null) {
@@ -59,7 +59,7 @@ export function validateUser(user) {
     isValid &&= validateStringField(user.city);
     isValid &&= validateStringField(user.country);
     isValid &&= validateAgeField(user.age);
-    isValid &&= validatePhoneNum(user.phone, user.country);
+    // isValid &&= validatePhoneNum(user.phone, user.country);
     isValid &&= validateEmail(user.email);
     isValid &&= validateNoteField(user.note);
 
@@ -73,5 +73,5 @@ const validationResults = allUsers.map(user => ({
 
 export const validUsers = allUsers.filter(user => validateUser(user));
 
-// console.log(validationResults);
+console.log(validationResults);
 // console.log(validUsers);

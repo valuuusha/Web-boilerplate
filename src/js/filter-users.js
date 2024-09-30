@@ -5,7 +5,7 @@ export function filterUsers(users, filterParams) {
         return (
             (!filterParams.country || user.country === filterParams.country) &&
             (!filterParams.age || user.age === filterParams.age) &&
-            (!filterParams.gender || user.gender.toLowerCase() === filterParams.gender.toLowerCase()) &&
+            (!filterParams.gender || user.gender.toLocaleLowerCase() === filterParams.gender.toLocaleLowerCase()) &&
             (filterParams.favorite === undefined || user.favorite === filterParams.favorite)
         );
     });

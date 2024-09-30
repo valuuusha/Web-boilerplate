@@ -5,7 +5,7 @@ function searchAllUsers(users, searchField, searchValue) {
         const value = user[searchField];
 
         if (typeof value === 'string' && typeof searchValue === 'string') {
-            return value.toLowerCase().includes(searchValue.toLowerCase());
+            return value.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase());
         }
 
         return value === searchValue;
@@ -29,7 +29,7 @@ function calculatePercentage(users, searchField, condition) {
         const val = user[searchField]; 
 
         if (typeof val === 'string') {
-            return condition(val.toLowerCase());
+            return condition(val.toLocaleLowerCase());
         }
 
         return condition(val);
