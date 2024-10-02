@@ -1,6 +1,7 @@
-import { validUsers as teachers } from './validate-data.js'; 
+import { validUsers as teachers } from '/validUsers.js'; 
 
 document.addEventListener('DOMContentLoaded', () => {
+    loadFavorites(); 
     renderTeachers();
     renderFavorites();
 });
@@ -68,10 +69,28 @@ function showTeacherInfo(teacher) {
     favoriteStar.onclick = () => {
         favoriteStar.classList.toggle("full");
         teacher.favorite = favoriteStar.classList.contains("full");
+        updateFavorites(); 
     };
 
     popup.style.display = 'flex';
 }
+function updateFavorites() {
+    localStorage.setItem('teachers', JSON.stringify(teachers));
+}
+
+function loadFavorites() {
+    const storedTeachers = localStorage.getItem('teachers');
+    if (storedTeachers) {
+        const parsedTeachers = JSON.parse(storedTeachers);
+        parsedTeachers.forEach((storedTeacher) => {
+            const teacher = teachers.find(t => t.id === storedTeacher.id);
+            if (teacher) {
+                teacher.favorite = storedTeacher.favorite;
+            }
+        });
+    }
+}
+
 
 document.getElementById('close-popup').addEventListener('click', function() {
     document.getElementById('teacher-popup').style.display = 'none';
