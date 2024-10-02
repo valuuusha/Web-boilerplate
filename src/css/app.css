@@ -285,6 +285,7 @@ p {
 
 .img-cont {
     margin-left: 1vw;
+    margin-top: 1vw;
 }
 
 .popup-header {
@@ -308,12 +309,6 @@ header .close-popup {
     cursor: pointer;
 }
 
-.contact-info {
-    margin-left: 3vw;
-    margin-top: 0;
-    margin-bottom: 2vw;
-}
-
 .teacher-info img {
     float: left;
     margin-right: 1.5vw;
@@ -326,7 +321,6 @@ header .close-popup {
     display: table;
     clear: both;
 }
-
 
 .teacher-info h2 {
     font-size: 2vw;
@@ -358,7 +352,39 @@ header .close-popup {
 }
 
 .popup-bio {
-    margin-top: 2vw;
+    margin-top: 1vw;
     margin-right: 2.2vw;
     margin-left: 1vw;
+}
+
+.popup .teacher-info h2{
+    margin-top: 0.5vw;
+}
+
+.info-and-star {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.star {
+    font-size: 2vw;
+    cursor: pointer;
+    margin-right: 1.5vw;
+    margin-top: 0.5vw;
+}
+
+.star::before {
+    content: "\2606";
+    color: gold;
+}
+
+.star.full::before {
+    content: "\2605"; 
+    color: gold;
+}
+
+.teacher-info .bio {
+    clear: both;
+    margin-top: 1vw;
 }

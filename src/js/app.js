@@ -1,8 +1,6 @@
 import { validUsers as teachers } from './validate-data.js'; 
-const popup = document.getElementById("teacher-popup");
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log(document.getElementById('teacher-popup'));
     renderTeachers();
     renderFavorites();
 });
@@ -63,6 +61,14 @@ function showTeacherInfo(teacher) {
     document.getElementById("popup-email").textContent = teacher.email; 
     document.getElementById("popup-phone").textContent = teacher.phone; 
     document.getElementById("popup-bio").textContent = teacher.note;
+
+    const favoriteStar = document.getElementById('popup-favorite');
+    favoriteStar.classList.toggle("full", teacher.favorite);
+
+    favoriteStar.onclick = () => {
+        favoriteStar.classList.toggle("full");
+        teacher.favorite = favoriteStar.classList.contains("full");
+    };
 
     popup.style.display = 'flex';
 }
