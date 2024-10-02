@@ -1,10 +1,14 @@
+import { validUsers as teachers } from './validate-data.js'; 
+const popup = document.getElementById("teacher-popup");
 
-
-import { validUsers as teachers} from './validate-data.js'; 
+document.addEventListener('DOMContentLoaded', () => {
+    console.log(document.getElementById('teacher-popup'));
+    renderTeachers();
+    renderFavorites();
+});
 
 function renderTeachers() {
     const teacherContainer = document.querySelector('.teachers');
-    teacherContainer.innerHTML = '';
 
     teachers.slice(0, 10).forEach(teacher => {
         const teacherCard = document.createElement('article');
@@ -17,6 +21,9 @@ function renderTeachers() {
         <h5>${teacher.country}</h5>
         `;
 
+        teacherCard.addEventListener('click', function() {
+            showTeacherInfo(teacher);
+        });
 
         teacherContainer.appendChild(teacherCard);
     });
@@ -24,7 +31,6 @@ function renderTeachers() {
 
 function renderFavorites() {
     const favoritesContainer = document.querySelector('.favourites .teachers');
-    favoritesContainer.innerHTML = '';
 
     teachers
         .filter(teacher => teacher.favorite === true)
@@ -39,10 +45,28 @@ function renderFavorites() {
             `;
 
             favoritesContainer.appendChild(favoriteCard);
+
+            favoriteCard.addEventListener('click', function() {
+                showTeacherInfo(teacher);
+            });
         });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    renderTeachers();
-    renderFavorites();
+function showTeacherInfo(teacher) {
+    const popup = document.getElementById('teacher-popup');
+
+    document.getElementById("popup-picture").src = teacher.picture_large;
+    document.getElementById("popup-name").textContent = teacher.full_name;
+    document.getElementById("popup-course").textContent = teacher.course;
+    document.getElementById("popup-city-country").textContent = `${teacher.city}, ${teacher.country}`;
+    document.getElementById("popup-age-gender").textContent = `${teacher.age}, ${teacher.gender}`;
+    document.getElementById("popup-email").textContent = teacher.email; 
+    document.getElementById("popup-phone").textContent = teacher.phone; 
+    document.getElementById("popup-bio").textContent = teacher.note;
+
+    popup.style.display = 'flex';
+}
+
+document.getElementById('close-popup').addEventListener('click', function() {
+    document.getElementById('teacher-popup').style.display = 'none';
 });

@@ -11,12 +11,11 @@
       <title>Teachfinder</title>
 
       <link rel="stylesheet" href="./css/app.css">
+      <script type="module" src="/src/js/app.js"></script>
 
    </head>
 
    <body itemscope itemtype="http://schema.org/WebPage">
-      <script type="module" src="/src/js/app.js"></script>
-      <!-- <script type="text/javascript" src="../build/app.js"></script> -->
       <div class="indent">
          <header>
             <div class="upper-header">
@@ -94,62 +93,37 @@
             </div>
             
             <section class="teachers">
+               
+               <div id="teacher-popup" class="popup" style="display:none;">
 
-               <article class="teacher-card">
-                  <img src="\src\images\photo_1.png"\>
-                  <h3>Ihor Tkachuk</h3>
-                  <h4>Chemistry</h4>
-                  <h5>Ukraine</h5>
-               </article>
+                  <section class="teacher-info">
 
-               <article class="teacher-card">
-                  <img src="\src\images\photo_2.png"\>
-                  <h3>Pragg Rameshbabu</h3>
-                  <h4>Chess</h4>
-                  <h5>India</h5>
-               </article>
+                        <header class="popup-header">
 
-               <article class="teacher-card">
-                  <img src="\src\images\photo_3.png"\>
-                  <h3>Floor Jansen</h3>
-                  <h4>Vocal</h4>
-                  <h5>Denmark</h5>
-               </article>
+                          <label for="teacher-info">Teacher Info</label>
+                          <span id="close-popup" class="close-popup">&times;</span>
+                        </header>
 
-               <article class="teacher-card">
-                  <img src="\src\images\photo_4.png"\>
-                  <h3>John Burke</h3>
-                  <h4>Computer Science</h4>
-                  <h5>Belgium</h5>
-               </article>
+                      <div class="img-cont">
 
-               <article class="teacher-card">
-                  <img src="\src\images\photo_5.png"\>
-                  <h3>Ari Tang</h3>
-                  <h4>Biology</h4>
-                  <h5>China</h5>
-               </article>
+                          <img id="popup-picture" src="" alt="Teacher's photo">
+                          <section class="contact-info">
+                              <h2 id="popup-name"></h2>
+                              <h3 id="popup-course"></h3>
+                              <p id="popup-city-country"></p>
+                              <p id="popup-age-gender">\</p>
+                              <a id="popup-email" href="#"></a>
+                              <p id="popup-phone"></p>
+                          </section>
+                          
+                          <section class="bio">
+                           <p id="popup-bio"></p>
+                           </section>
+                      </div>
 
-               <article class="teacher-card">
-                  <img src="\src\images\photo_6.png"\>
-                  <h3>Rachel Andrew</h3>
-                  <h4>Medicine</h4>
-                  <h5>UK</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_7.png"\>
-                  <h3>Anna Muzychuk</h3>
-                  <h4>Chess</h4>
-                  <h5>Belarus</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_8.png"\>
-                  <h3>Radoslaw Ljuboevic</h3>
-                  <h4>Physics</h4>
-                  <h5>Poland</h5>
-               </article>
+                      
+                  </section>
+              </div>
             </section>
          </section>
 
@@ -269,40 +243,9 @@
          <section class="favourites">
             <h2>Favourites</h2>
 
-            <section class="teachers">
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_1.png"\>
-                  <h3>Ihor Tlachuk</h3>
-                  <h5>Ukraine</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_7.png"\>
-                  <h3>Anna Makarevich</h3>
-                  <h5>Belarus</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_4.png"\>
-                  <h3>John Burke</h3>
-                  <h5>Belgium</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_5.png"\>
-                  <h3>Ari Tang</h3>
-                  <h5>China</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_3.png"\>
-                  <h3>Floor Jansen</h3>
-                  <h5>Denmark</h5>
-               </article>
-            </section>
+            <section class="teachers"></section>
          </section>
-
+         
          <hr/>
 
          <footer>
