@@ -129,6 +129,7 @@ renderFavorites();
 //  TABLE & SORTING
 
 document.addEventListener('DOMContentLoaded', function() {
+    searchInput.value = '';
 
     const tableBody = document.getElementById('tbody');
     const tableNavigation = document.getElementById('table-nav');
@@ -295,3 +296,26 @@ document.addEventListener('DOMContentLoaded', function() {
         return sortDirection[column];
     }
 });
+
+// SEARCH
+
+const searchInput = document.querySelector('.search-input');
+const searchButton = document.querySelector('.search');
+
+searchButton.addEventListener('click', () => {
+    event.preventDefault();
+    const searchValue = searchInput.value.toLowerCase(); 
+    const matchedTeachers = findMatchesByValue(teachers, searchValue); 
+
+    renderTeachers(matchedTeachers);
+});
+
+function findMatchesByValue(teachers, searchValue) {
+    return teachers.filter(teacher => {
+        const nameMatch = teacher.full_name.toLowerCase().includes(searchValue);
+        const noteMatch = teacher.note.toLowerCase().includes(searchValue);
+        const ageMatch = String(teacher.age).includes(searchValue);
+
+        return nameMatch || noteMatch || ageMatch;
+    });
+}
