@@ -12,6 +12,7 @@
 
       <link rel="stylesheet" href="./css/app.css">
       <script type="module" src="/src/js/app.js"></script>
+      <script type="module" src="./js/filter-users.js"></script>
 
    </head>
 
@@ -51,87 +52,98 @@
 
             <h2>Top Teachers</h2>
 
-            <div class="filters">
+            <div class="filters" id="filters">
 
                <form class="classification">
 
                   <label>Age</label>
 
-                  <select>
-                     <option>18-31</option>
-                     <option>32-51</option>
+                  <select id="filter-age">
+                     <option value="">All ages</option>
+                     <option value="18-25">18-25</option>
+                     <option value="26-35">26-35</option>
+                     <option value="36-50">35-45</option>
+                     <option value="51-65">45-65</option>
+                 </select>
+               </form>
+
+               <form class="classification">
+
+                  <label>Country</label>
+
+                  <select id="filter-country">
+                     <option value="">All countries</option>
+                     <option value="Ireland">Ireland</option>
+                     <option value="Australia">Australia</option>
+                     <option value="United States">United States</option>
+                     <option value="Finland">Finland</option>
+                     <option value="Switzerland">Switzerland</option>
+                     <option value="Spain">Spain</option>
+                     <option value="Norway">Norway</option>
+                     <option value="Germany">Germany</option>
+                     <option value="Denmark">Denmark</option>
+                     <option value="Canada">Canada</option>
+                     <option value="France">France</option>
+                     <option value="Netherlands">Netherlands</option>
+                     <option value="Turkey">Turkey</option>
+                     <option value="New Zealand">New Zealand</option>
                   </select>
                </form>
 
                <form class="classification">
 
-                  <label>Region</label>
+                  <label>Sex</label>
 
-                  <select>
-                     <option>Europe</option>
-                     <option>Asia</option>
-                     <option>Africa</option>
-                     <option>North America</option>
-                     <option>South America</option>
-                     <option>Australia</option>
+                  <select id="filter-gender">
+                     <option value="">All genders</option>
+                     <option value="male">Male</option>
+                     <option value="female">Female</option>
                   </select>
                </form>
 
-               <form class="classification">
+               <label><input type="checkbox" id="filter-photo"> Only with photo</label>
 
-                  <label class>Sex</label>
-
-                  <select>
-                     <option>Male</option>
-                     <option>Female</option>
-                  </select>
-               </form>
-
-               <label><input type="checkbox"> Only with photo</label>
-
-               <label><input type="checkbox"> Only favorites</label>
+               <label><input type="checkbox" id="filter-favorite"> Only favorites</label>
             </div>
-            
-            <section class="teachers">
-               
-               <div id="teacher-popup" class="popup" style="display:none;">
 
-                  <section class="teacher-info">
+            <div id="teacher-popup" class="popup" style="display:none;">
 
-                     <header class="popup-header">
+               <section class="teacher-info">
 
-                        <label for="teacher-info">Teacher Info</label>
-                        <span id="close-popup" class="close-popup">&times;</span>
-                     </header>
+                  <header class="popup-header">
 
-                      <div class="img-cont">
-                      <div class="img-cont">
+                     <label for="teacher-info">Teacher Info</label>
+                     <span id="close-popup" class="close-popup">&times;</span>
+                  </header>
 
-                     <div class="img-cont">
+                  <div class="img-cont">
 
-                        <img id="popup-picture" src="" alt="Teacher's photo">
-                        
-                        <div class="info-and-star">
+                     <img id="popup-picture" src=" " alt="Teacher's photo">
+                     
+                     <div class="info-and-star">
 
-                           <section class="contact-info">
-                              <h2 id="popup-name"></h2>
-                              <h3 id="popup-course"></h3>
-                              <p id="popup-city-country"></p>
-                              <p id="popup-age-gender">\</p>
-                              <a id="popup-email" href="#"></a>
-                              <p id="popup-phone"></p>
-                           </section>
-                           
-                           <span id="popup-favorite" class="star"></span>
-                        </div>
-                        
-                        <section class="bio">
-                           <p id="popup-bio"></p>
+                        <section class="contact-info">
+                           <h2 id="popup-name"></h2>
+                           <h3 id="popup-course"></h3>
+                           <p id="popup-city-country"></p>
+                           <p id="popup-age-gender">\</p>
+                           <a id="popup-email" href="#"></a>
+                           <p id="popup-phone"></p>
                         </section>
+                        
+                        <span id="popup-favorite" class="star"></span>
                      </div>
-                      
-                  </section>
-              </div>
+                     
+                     <section class="bio">
+                        <p id="popup-bio"></p>
+                     </section>
+                  </div>
+                   
+               </section>
+           </div>
+            
+            <section class="teachers" id="teacher-grid">
+         
             </section>
          </section>
 

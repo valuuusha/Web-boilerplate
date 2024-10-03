@@ -1,10 +1,17 @@
-import { validUsers } from './validate-data.js';
+import { validUsers } from './validUsers.js';
 
 export function filterUsers(users, filterParams) {
     return users.filter(user => {
+
+        let ageMatch = true;
+        if (filterParams.age) {
+            const { minAge, maxAge } = filterParams.age;
+            ageMatch = user.age >= minAge && user.age <= maxAge;
+        }
+
         return (
             (!filterParams.country || user.country === filterParams.country) &&
-            (!filterParams.age || user.age === filterParams.age) &&
+            ageMatch &&
             (!filterParams.gender || user.gender.toLocaleLowerCase() === filterParams.gender.toLocaleLowerCase()) &&
             (filterParams.favorite === undefined || user.favorite === filterParams.favorite)
         );
@@ -12,8 +19,8 @@ export function filterUsers(users, filterParams) {
 }
 
 const filterParams = {
-    country: 'Australia',
-    age: 46,
+    country: 'Ireland',
+    age: 55,
     gender: 'male',
     favorite: false
 };

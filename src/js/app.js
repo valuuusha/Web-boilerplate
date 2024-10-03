@@ -1,13 +1,13 @@
-import { validUsers as teachers } from '/validUsers.js'; 
+import { validUsers as teachers } from './validUsers.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadFavorites(); 
-    renderTeachers();
-    renderFavorites();
-});
+const filterForm = document.getElementById("filters");
+const teacherContainer = document.getElementById('teacher-grid');
+const favoritesContainer = document.querySelector('.favourites .teachers');
+const popup = document.getElementById('teacher-popup');
 
-function renderTeachers() {
-    const teacherContainer = document.querySelector('.teachers');
+
+function renderTeachers(teachers) {
+    teacherContainer.innerHTML = ''; 
 
     teachers.slice(0, 10).forEach(teacher => {
         const teacherCard = document.createElement('article');
@@ -29,7 +29,7 @@ function renderTeachers() {
 }
 
 function renderFavorites() {
-    const favoritesContainer = document.querySelector('.favourites .teachers');
+    favoritesContainer.innerHTML = '';
 
     teachers
         .filter(teacher => teacher.favorite === true)
@@ -43,16 +43,16 @@ function renderFavorites() {
                 <h5>${teacher.country}</h5>
             `;
 
-            favoritesContainer.appendChild(favoriteCard);
-
             favoriteCard.addEventListener('click', function() {
                 showTeacherInfo(teacher);
             });
+
+            favoritesContainer.appendChild(favoriteCard);
         });
 }
 
+
 function showTeacherInfo(teacher) {
-    const popup = document.getElementById('teacher-popup');
 
     document.getElementById("popup-picture").src = teacher.picture_large;
     document.getElementById("popup-name").textContent = teacher.full_name;
@@ -69,11 +69,13 @@ function showTeacherInfo(teacher) {
     favoriteStar.onclick = () => {
         favoriteStar.classList.toggle("full");
         teacher.favorite = favoriteStar.classList.contains("full");
-        updateFavorites(); 
+        updateFavorites();
+        renderFavorites();
     };
 
     popup.style.display = 'flex';
 }
+
 function updateFavorites() {
     localStorage.setItem('teachers', JSON.stringify(teachers));
 }
@@ -95,3 +97,31 @@ function loadFavorites() {
 document.getElementById('close-popup').addEventListener('click', function() {
     document.getElementById('teacher-popup').style.display = 'none';
 });
+
+filterForm.addEventListener("change", function() {
+    const country = document.getElementById("filter-country").value;
+    const ageRange = document.getElementById("filter-age").value;
+    const gender = document.getElementById("filter-gender").value;
+    const favoritesOnly = document.getElementById("filter-favorite").checked;
+
+    const filteredTeachers = teachers.filter(teacher => {
+        const countryMatch = !country || teacher.country === country;
+
+        let ageMatch = true;
+        if (ageRange) {
+            const [minAge, maxAge] = ageRange.split('-').map(Number);
+            ageMatch = teacher.age >= minAge && teacher.age <= maxAge;
+        }
+
+        const genderMatch = !gender || teacher.gender === gender;
+        const favoritesMatch = !favoritesOnly || teacher.favorite;
+
+        return countryMatch && ageMatch && genderMatch && favoritesMatch;
+    });
+
+    renderTeachers(filteredTeachers);
+});
+
+loadFavorites(); 
+renderTeachers(teachers);
+renderFavorites();
