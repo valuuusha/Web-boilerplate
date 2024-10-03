@@ -191,9 +191,6 @@ hr{
     margin: 2vw;
 }
 
-.statistics table {
-    border-collapse: collapse;
-}
 
 .statistics th, .statistics td {
     padding: 1vw;
@@ -210,10 +207,32 @@ table{
     margin-top: 2vw;
     margin-bottom: 2vw;
     font-size: 1.1vw;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+#head-tr{
+    border-bottom: 1px solid #222222;
 }
 th, td {
-    border: 1px solid #ddd; 
+    border: none; 
     text-align: center;
+    position: sticky;
+}
+
+td:first-child {
+    text-align: left;
+    padding-left: 1vw;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #faf5fb;
+}
+
+#table-nav {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 1em;
+    margin-left: 1em;
 }
 
 .table-nav ul {
@@ -387,4 +406,32 @@ header .close-popup {
 .teacher-info .bio {
     clear: both;
     margin-top: 1vw;
+}
+
+.page-button {
+    border: none;
+    background-color: transparent;
+    color: #1cb7d6;
+    font-size: 1em;
+    padding: 0.5em 0.8em;
+    cursor: pointer;
+    margin: 0 0.2em;
+    transition: color 0.3s ease;
+}
+
+.page-button:hover {
+    color: #1cb7d6;
+    text-decoration: underline;
+}
+
+.page-button.active {
+    font-weight: bold;
+    color: #222222;
+
+}
+
+span {
+    font-size: 1.2em;
+    color: #1cb7d6;
+    padding: 0.5em;
 }

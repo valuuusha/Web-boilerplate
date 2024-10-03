@@ -125,3 +125,173 @@ filterForm.addEventListener("change", function() {
 loadFavorites(); 
 renderTeachers(teachers);
 renderFavorites();
+
+//  TABLE & SORTING
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const tableBody = document.getElementById('tbody');
+    const tableNavigation = document.getElementById('table-nav');
+    const itemsPerPage = 10;
+    let currentPage = 1;
+
+    function waitForData() {
+
+        if (teachers.length > 0) {
+            
+            renderTableData(teachers);
+        } else {
+            setTimeout(waitForData, 1000);
+        }
+    }
+    waitForData();
+
+    function renderTableData(data) {
+        tableBody.innerHTML = ''; 
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const currentData = data.slice(startIndex, endIndex);
+
+        currentData.forEach((teacher) => {
+
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${teacher.full_name}</td>
+                <td>${teacher.course}</td>
+                <td>${teacher.age}</td>
+                <td>${teacher.gender}</td>
+                <td>${teacher.country}</td>
+            `;
+
+            tableBody.appendChild(newRow);
+        });
+
+        renderNav(data.length);
+    }
+
+    function renderNav(itemsInTotal) {
+
+        const pagesInTotal = Math.ceil(itemsInTotal / itemsPerPage);
+        const maxPages = 2; 
+        tableNavigation.innerHTML = '';
+    
+        const createDots = () => {
+
+            const dots = document.createElement('span');
+            dots.textContent = '...';
+            dots.classList.add('dots');
+            return dots;
+        };
+    
+        const createNavButtons = (pageNum, label = null) => {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = label ? label : pageNum;
+            pageButton.classList.add('page-button');
+    
+            if (pageNum === currentPage) {
+                pageButton.classList.add('active');
+            }
+    
+            pageButton.addEventListener('click', () => {
+                currentPage = pageNum;
+                renderTableData(teachers);
+            });
+    
+            return pageButton;
+        };
+    
+        let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+        let endPage = Math.min(pagesInTotal, currentPage + Math.floor(maxPages / 2));
+    
+
+        if (currentPage <= Math.floor(maxPages / 2)) {
+            
+            endPage = Math.min(pagesInTotal, maxPages);
+
+        } else if (currentPage + Math.floor(maxPages / 2) >= pagesInTotal) {
+
+            startPage = Math.max(1, pagesInTotal - maxPages + 1);
+        }
+    
+        if (startPage > 1) {
+
+            tableNavigation.appendChild(createNavButtons(1));
+            if (startPage > 2) {
+
+                tableNavigation.appendChild(createDots());
+            }
+        }
+    
+        for (let i = startPage; i <= endPage; i++) {
+
+            const pageButton = createNavButtons(i);
+            tableNavigation.appendChild(pageButton);
+        }
+    
+        if (endPage < pagesInTotal) {
+
+            if (endPage < pagesInTotal - 1) {
+                tableNavigation.appendChild(createDots());
+            }
+            tableNavigation.appendChild(createNavButtons(pagesInTotal, 'Last'));
+        }
+    }
+    
+
+    function sortTable(column, type = 'string', direction = 'asc') {
+
+        const sortedData = [...teachers].sort((a, b) => {
+            let valueA = getColumnValue(a, column);
+            let valueB = getColumnValue(b, column);
+
+            if (type === 'number') {
+                valueA = parseInt(valueA);
+                valueB = parseInt(valueB);
+            }
+
+            return direction === 'asc' ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+        });
+
+        currentPage = 1; 
+        renderTableData(sortedData);
+    }
+
+    function getColumnValue(teacher, column) {
+
+        switch (column) {
+            case 0:
+                return teacher.full_name;
+
+            case 1:
+                return teacher.course; 
+
+            case 2:
+                return teacher.age;
+
+            case 3:  
+                return teacher.country;
+
+            default:
+                return '';
+        }
+    }
+
+    const sortDirection = {
+        name: 'asc',
+        course: 'asc',
+        age: 'asc',
+        country: 'asc'
+    };
+
+    document.getElementById('sort-fullname').addEventListener('click', () => sortTable(0, 'string', switchSort('name')));
+    document.getElementById('sort-spec').addEventListener('click', () => sortTable(1, 'string', switchSort('course')));
+    document.getElementById('sort-age').addEventListener('click', () => sortTable(2, 'number', switchSort('age')));
+    document.getElementById('sort-nat').addEventListener('click', () => sortTable(3, 'string', switchSort('country')));
+
+    function switchSort(column) {
+        sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+
+        return sortDirection[column];
+    }
+});
