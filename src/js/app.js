@@ -1,4 +1,7 @@
-import { validUsers as teachers } from './validUsers.js';
+import { validUsers as teachers} from './validUsers.js';
+import { addFields} from './format-data.js';
+
+
 
 const filterForm = document.getElementById("filters");
 const teacherContainer = document.getElementById('teacher-grid');
@@ -302,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const searchInput = document.querySelector('.search-input');
 const searchButton = document.querySelector('.search');
 
-searchButton.addEventListener('click', () => {
+searchButton.addEventListener('click', (event) => {
     event.preventDefault();
     const searchValue = searchInput.value.toLowerCase(); 
     const matchedTeachers = findMatchesByValue(teachers, searchValue); 
@@ -319,3 +322,87 @@ function findMatchesByValue(teachers, searchValue) {
         return nameMatch || noteMatch || ageMatch;
     });
 }
+
+// ADDING NEW TEACHERS
+
+const openPopupButton = document.getElementById('open-teach-add-popup');
+const closePopupButton = document.getElementById('close-add-popup');
+const popupAdd = document.getElementById('teach-add-popup');
+const form = document.getElementById('addteacher-form');
+import { validateUser } from './validate-data.js';
+
+openPopupButton.addEventListener('click', () => {
+    popupAdd.style.display = 'block';
+});
+
+
+closePopupButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    popupAdd.style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+    if (event.target === popupAdd) {
+        popupAdd.style.display = 'none';
+    }
+});
+
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    function calculateAge(birthdate) {
+        const today = new Date();
+        const birthDate = new Date(birthdate);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    const name = document.getElementById('name').value;
+    const speciality = document.getElementById('speciality').value;
+    const country = document.getElementById('country').value;
+    const city = document.getElementById('city').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const birthdate = document.getElementById('birthdate').value;
+    const sex = document.querySelector('input[name="sex"]:checked')?.id;
+    const bgcolor = document.getElementById('bgcolor').value;
+    const notes = document.getElementById('notes').value;
+    const age = calculateAge(birthdate);
+
+    const newTeacher = {
+        full_name: name,
+        course: speciality,
+        country: country,
+        city: city,
+        email: email,
+        phone: phone,
+        b_date: birthdate,
+        gender: sex,
+        bg_color: bgcolor,
+        note: notes,
+        age: age  
+    };
+
+    if (validateUser(newTeacher)) {
+        addFields(newTeacher);
+
+        teachers.push(newTeacher);
+
+        form.reset();
+        popupAdd.style.display = 'none';
+
+        renderTeachers(teachers);
+        console.log(newTeacher);
+
+    } else {
+        alert("Error: check your input data");
+    }
+});
+
+
+

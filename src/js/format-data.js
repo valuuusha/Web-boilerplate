@@ -27,7 +27,7 @@ export function formatUsers(user) {
 
 const formattedUsers = randomUserMock.map(formatUsers);
 
-function addFields(user) {
+export function addFields(user) {
   return {
     ...user,
     id: user.id || generateRandomId(),

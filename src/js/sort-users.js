@@ -1,4 +1,4 @@
-import { validUsers } from './validate-data.js'; 
+import { validUsers } from './validUsers.js'; 
 
 export function sortUsers(users, sortParam, asc) {
 

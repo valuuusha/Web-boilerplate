@@ -40,7 +40,92 @@
                   </ul>
                </nav>
 
-               <button class="add-teacher">Add teacher</button>
+               <button class="add-teacher" id="open-teach-add-popup">Add teacher</button>
+
+               <div id="teach-add-popup" class="popup" style="display: none;">
+
+                  <div class="wrapper">
+
+                     <div class="add-teacher-label">
+
+                        <label for="wrapper">Add Teacher</label>
+                        <a id="close-add-popup" href="#">×</a>
+                     </div>
+              
+                     <form id="addteacher-form">
+                        <div class="name">
+                           <label for="name">Name</label>
+                           <input type="text" id="name" placeholder="Enter name">
+                        </div>
+            
+                        <div class="speciality">
+                           <label for="speciality">Speciality</label>
+                           <select id="speciality">
+                                 <option value="mathematics">Mathematics</option>
+                                 <option value="chess">Chess</option>
+                                 <option value="vocal">Vocal</option>
+                                 <option value="computer science">Computer Science</option>
+                                 <option value="biology">Biology</option>
+                                 <option value="physics">Physics</option>
+                                 <option value="chemistry">Chemistry</option>
+                           </select>
+                        </div>
+            
+                        <div class="country">
+                           <label for="country">Country</label>
+                           <select id="country">
+                                 <option value="ukraine">Ukraine</option>
+                                 <option value="usa">USA</option>
+                                 <option value="denmark">Denmark</option>
+                                 <option value="china">China</option>
+                                 <option value="india">India</option>
+                           </select>
+                        </div>
+            
+                        <div class="city">
+                           <label for="city">City</label>
+                           <input type="text" id="city">
+                        </div>
+            
+                        <div class="email">
+                           <label for="email">Email</label>
+                           <input type="email" id="email">
+                        </div>
+            
+                        <div class="phone">
+                           <label for="phone">Phone</label>
+                           <input type="tel" id="phone">
+                        </div>
+            
+                        <div class="birthdate">
+                           <label for="birthdate">Date of birth</label>
+                           <input type="date" id="birthdate">
+                        </div>
+            
+                        <div class="sex">
+                           <label>Sex</label>
+                           <div class="sex-options">
+                                 <label for="male">Male</label>
+                                 <input type="radio" id="male" name="sex">
+                                 <label for="female">Female</label>
+                                 <input type="radio" id="female" name="sex">
+                           </div>
+                        </div>
+            
+                        <div class="bgcolor">
+                           <label for="bgcolor">Background color</label>
+                           <input type="color" id="bgcolor">
+                        </div>
+            
+                        <div class="notes">
+                           <label for="notes">Notes (optional)</label>
+                           <textarea id="notes"></textarea>
+                        </div>
+            
+                        <button class="button" id="add-button" type="submit">Add</button>
+                     </form>
+                  </div>
+              </div>
 
             </div>
 
@@ -73,6 +158,7 @@
 
                   <select id="filter-country">
                      <option value="">All countries</option>
+                     <option value="Ukraine">Ukraine</option>
                      <option value="Ireland">Ireland</option>
                      <option value="Australia">Australia</option>
                      <option value="United States">United States</option>
