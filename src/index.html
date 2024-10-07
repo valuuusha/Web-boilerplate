@@ -11,12 +11,12 @@
       <title>Teachfinder</title>
 
       <link rel="stylesheet" href="./css/app.css">
+      <script type="module" src="/src/js/app.js"></script>
+      <script type="module" src="./js/filter-users.js"></script>
 
    </head>
 
    <body itemscope itemtype="http://schema.org/WebPage">
-
-      <script type="text/javascript" src="../build/app.js"></script>
       <div class="indent">
          <header>
             <div class="upper-header">
@@ -26,7 +26,7 @@
 
                <form>
                   <input class="search-input" type="text" placeholder="Name, note or age to search">
-                  <button class="search">Search</button>
+                  <button class="search" type="button">Search</button>
                </form>
             </div>
 
@@ -40,7 +40,92 @@
                   </ul>
                </nav>
 
-               <button class="add-teacher">Add teacher</button>
+               <button class="add-teacher" id="open-teach-add-popup">Add teacher</button>
+
+               <div id="teach-add-popup" class="popup" style="display: none;">
+
+                  <div class="wrapper">
+
+                     <div class="add-teacher-label">
+
+                        <label for="wrapper">Add Teacher</label>
+                        <a id="close-add-popup" href="#">×</a>
+                     </div>
+              
+                     <form id="addteacher-form">
+                        <div class="name">
+                           <label for="name">Name</label>
+                           <input type="text" id="name" placeholder="Enter name">
+                        </div>
+            
+                        <div class="speciality">
+                           <label for="speciality">Speciality</label>
+                           <select id="speciality">
+                                 <option value="mathematics">Mathematics</option>
+                                 <option value="chess">Chess</option>
+                                 <option value="vocal">Vocal</option>
+                                 <option value="computer science">Computer Science</option>
+                                 <option value="biology">Biology</option>
+                                 <option value="physics">Physics</option>
+                                 <option value="chemistry">Chemistry</option>
+                           </select>
+                        </div>
+            
+                        <div class="country">
+                           <label for="country">Country</label>
+                           <select id="country">
+                                 <option value="ukraine">Ukraine</option>
+                                 <option value="usa">USA</option>
+                                 <option value="denmark">Denmark</option>
+                                 <option value="china">China</option>
+                                 <option value="india">India</option>
+                           </select>
+                        </div>
+            
+                        <div class="city">
+                           <label for="city">City</label>
+                           <input type="text" id="city">
+                        </div>
+            
+                        <div class="email">
+                           <label for="email">Email</label>
+                           <input type="email" id="email">
+                        </div>
+            
+                        <div class="phone">
+                           <label for="phone">Phone</label>
+                           <input type="tel" id="phone">
+                        </div>
+            
+                        <div class="birthdate">
+                           <label for="birthdate">Date of birth</label>
+                           <input type="date" id="birthdate">
+                        </div>
+            
+                        <div class="sex">
+                           <label>Sex</label>
+                           <div class="sex-options">
+                                 <label for="male">Male</label>
+                                 <input type="radio" id="male" name="sex">
+                                 <label for="female">Female</label>
+                                 <input type="radio" id="female" name="sex">
+                           </div>
+                        </div>
+            
+                        <div class="bgcolor">
+                           <label for="bgcolor">Background color</label>
+                           <input type="color" id="bgcolor">
+                        </div>
+            
+                        <div class="notes">
+                           <label for="notes">Notes (optional)</label>
+                           <textarea id="notes"></textarea>
+                        </div>
+            
+                        <button class="button" id="add-button" type="submit">Add</button>
+                     </form>
+                  </div>
+              </div>
 
             </div>
 
@@ -52,104 +137,99 @@
 
             <h2>Top Teachers</h2>
 
-            <div class="filters">
+            <div class="filters" id="filters">
 
                <form class="classification">
 
                   <label>Age</label>
 
-                  <select>
-                     <option>18-31</option>
-                     <option>32-51</option>
+                  <select id="filter-age">
+                     <option value="">All ages</option>
+                     <option value="18-25">18-25</option>
+                     <option value="26-35">26-35</option>
+                     <option value="36-50">35-45</option>
+                     <option value="51-65">45-65</option>
+                 </select>
+               </form>
+
+               <form class="classification">
+
+                  <label>Country</label>
+
+                  <select id="filter-country">
+                     <option value="">All countries</option>
+                     <option value="Ukraine">Ukraine</option>
+                     <option value="Ireland">Ireland</option>
+                     <option value="Australia">Australia</option>
+                     <option value="United States">United States</option>
+                     <option value="Finland">Finland</option>
+                     <option value="Switzerland">Switzerland</option>
+                     <option value="Spain">Spain</option>
+                     <option value="Norway">Norway</option>
+                     <option value="Germany">Germany</option>
+                     <option value="Denmark">Denmark</option>
+                     <option value="Canada">Canada</option>
+                     <option value="France">France</option>
+                     <option value="Netherlands">Netherlands</option>
+                     <option value="Turkey">Turkey</option>
+                     <option value="New Zealand">New Zealand</option>
                   </select>
                </form>
 
                <form class="classification">
 
-                  <label>Region</label>
+                  <label>Sex</label>
 
-                  <select>
-                     <option>Europe</option>
-                     <option>Asia</option>
-                     <option>Africa</option>
-                     <option>North America</option>
-                     <option>South America</option>
-                     <option>Australia</option>
+                  <select id="filter-gender">
+                     <option value="">All genders</option>
+                     <option value="male">Male</option>
+                     <option value="female">Female</option>
                   </select>
                </form>
 
-               <form class="classification">
+               <label><input type="checkbox" id="filter-photo"> Only with photo</label>
 
-                  <label class>Sex</label>
-
-                  <select>
-                     <option>Male</option>
-                     <option>Female</option>
-                  </select>
-               </form>
-
-               <label><input type="checkbox"> Only with photo</label>
-
-               <label><input type="checkbox"> Only favorites</label>
+               <label><input type="checkbox" id="filter-favorite"> Only favorites</label>
             </div>
+
+            <div id="teacher-popup" class="popup" style="display:none;">
+
+               <section class="teacher-info">
+
+                  <header class="popup-header">
+
+                     <label for="teacher-info">Teacher Info</label>
+                     <span id="close-popup" class="close-popup">&times;</span>
+                  </header>
+
+                  <div class="img-cont">
+
+                     <img id="popup-picture" src=" " alt="Teacher's photo">
+                     
+                     <div class="info-and-star">
+
+                        <section class="contact-info">
+                           <h2 id="popup-name"></h2>
+                           <h3 id="popup-course"></h3>
+                           <p id="popup-city-country"></p>
+                           <p id="popup-age-gender">\</p>
+                           <a id="popup-email" href="#"></a>
+                           <p id="popup-phone"></p>
+                        </section>
+                        
+                        <span id="popup-favorite" class="star"></span>
+                     </div>
+                     
+                     <section class="bio">
+                        <p id="popup-bio"></p>
+                     </section>
+                  </div>
+                   
+               </section>
+           </div>
             
-            <section class="teachers">
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_1.png"\>
-                  <h3>Ihor Tkachuk</h3>
-                  <h4>Chemistry</h4>
-                  <h5>Ukraine</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_2.png"\>
-                  <h3>Pragg Rameshbabu</h3>
-                  <h4>Chess</h4>
-                  <h5>India</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_3.png"\>
-                  <h3>Floor Jansen</h3>
-                  <h4>Vocal</h4>
-                  <h5>Denmark</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_4.png"\>
-                  <h3>John Burke</h3>
-                  <h4>Computer Science</h4>
-                  <h5>Belgium</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_5.png"\>
-                  <h3>Ari Tang</h3>
-                  <h4>Biology</h4>
-                  <h5>China</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_6.png"\>
-                  <h3>Rachel Andrew</h3>
-                  <h4>Medicine</h4>
-                  <h5>UK</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_7.png"\>
-                  <h3>Anna Muzychuk</h3>
-                  <h4>Chess</h4>
-                  <h5>Belarus</h5>
-               </article>
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_8.png"\>
-                  <h3>Radoslaw Ljuboevic</h3>
-                  <h4>Physics</h4>
-                  <h5>Poland</h5>
-               </article>
+            <section class="teachers" id="teacher-grid">
+         
             </section>
          </section>
 
@@ -160,16 +240,16 @@
       
             <table>
                <thead>
-                  <tr>
-                     <th>Name</th>
-                     <th>Speciality</th>
-                     <th>Age</th>
-                     <th>Gender</th>
-                     <th>Nationality</th>
+                  <tr id="head-tr">
+                     <th id="sort-fullname">Name</th>
+                     <th id="sort-spec">Speciality</th>
+                     <th id="sort-age">Age</th>
+                     <th id="sort-gender">Gender</th>
+                     <th id="sort-nat">Nationality</th>
                   </tr>
                </thead>
 
-               <tbody>
+               <tbody id="tbody">
 
                   <tr>
                      <td>Daisy Alexander</td>
@@ -253,7 +333,7 @@
                </tbody>
             </table>
 
-            <nav class="table-nav">
+            <nav class="table-nav" id="table-nav">
                <ul>
                   <li><a href="#">1</a></li>
                   <li><a href="#">2</a></li>
@@ -269,40 +349,9 @@
          <section class="favourites">
             <h2>Favourites</h2>
 
-            <section class="teachers">
-
-               <article class="teacher-card">
-                  <img src="\src\images\photo_1.png"\>
-                  <h3>Ihor Tlachuk</h3>
-                  <h5>Ukraine</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_7.png"\>
-                  <h3>Anna Makarevich</h3>
-                  <h5>Belarus</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_4.png"\>
-                  <h3>John Burke</h3>
-                  <h5>Belgium</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_5.png"\>
-                  <h3>Ari Tang</h3>
-                  <h5>China</h5>
-               </article>
-         
-               <article class="teacher-card">
-                  <img src="\src\images\photo_3.png"\>
-                  <h3>Floor Jansen</h3>
-                  <h5>Denmark</h5>
-               </article>
-            </section>
+            <section class="teachers"></section>
          </section>
-
+         
          <hr/>
 
          <footer>

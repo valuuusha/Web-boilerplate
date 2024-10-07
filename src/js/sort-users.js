@@ -1,4 +1,4 @@
-import { validUsers } from './validate-data.js'; 
+import { validUsers } from './validUsers.js'; 
 
 export function sortUsers(users, sortParam, asc) {
 
@@ -17,8 +17,8 @@ export function sortUsers(users, sortParam, asc) {
             return asc ? dateA - dateB : dateB - dateA;
         }
 
-        const strA = String(valueA || '').toLowerCase();
-        const strB = String(valueB || '').toLowerCase();
+        const strA = String(valueA || '').toLocaleLowerCase();
+        const strB = String(valueB || '').toLocaleLowerCase();
 
         if (strA < strB) return asc ? -1 : 1;
         if (strA > strB) return asc ? 1 : -1;

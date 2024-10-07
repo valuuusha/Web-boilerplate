@@ -1,10 +1,13 @@
 import { allUsers } from './format-data.js';
-import { isValidNumber } from 'libphonenumber-js';
-import countries from 'i18n-iso-countries';
-import enLocale from 'i18n-iso-countries/langs/en.json' assert { type: 'json' };
+// import { isValidNumber } from 'libphonenumber-js';
+// import countries from 'i18n-iso-countries';
+// import enLocale from 'i18n-iso-countries/langs/en.json' assert { type: 'json' };
+// import fs from 'fs'; 
 
-function validateStringField(field) {
-    return typeof field === 'string' && field[0] === field[0].toUpperCase();
+
+
+function validateStringField(field){
+    return typeof field === 'string' && (field[0] === field[0].toUpperCase() || field[0] === field[0].toLocaleLowerCase());
 }
 
 function validateFullName(fullName) {
@@ -14,10 +17,11 @@ function validateFullName(fullName) {
 
 function validateGender(gender) {
     const validGenders = ['male', 'female'];
-    return validGenders.includes(gender.toLowerCase());
+    return validGenders.includes(gender.toLocaleLowerCase());
 }
 
 function validateAgeField(age) {
+    age = Number(age);
     return typeof age === 'number' && age > 0 && age <= 100;
 }
 
@@ -26,7 +30,7 @@ function validateEmail(email) {
     return emailRegex.test(email);
 }
 
-countries.registerLocale(enLocale);
+// countries.registerLocale(enLocale);
 
 function getCountryCodeByName(countryName) {
     return countries.getAlpha2Code(countryName, 'en');
@@ -48,22 +52,18 @@ function validateNoteField(note) {
     }
     return typeof note === 'string' && /^[A-Z][a-zA-Z\s.,!?'"()-]*$/.test(note);
 }
-
-
 export function validateUser(user) {
-    let isValid = true;
 
-    isValid &&= validateFullName(user.full_name);
-    isValid &&= validateGender(user.gender);
-    isValid &&= validateStringField(user.state);
-    isValid &&= validateStringField(user.city);
-    isValid &&= validateStringField(user.country);
-    isValid &&= validateAgeField(user.age);
-    isValid &&= validatePhoneNum(user.phone, user.country);
-    isValid &&= validateEmail(user.email);
-    isValid &&= validateNoteField(user.note);
-
-    return isValid;
+    return (
+        validateFullName(user.full_name) &&
+        validateGender(user.gender) &&
+        validateStringField(user.country) &&
+        validateStringField(user.city) &&
+        validateEmail(user.email) &&
+        validateAgeField(user.age) &&
+        // validatePhoneNum(user.phone, user.country) &&
+        validateNoteField(user.note)
+    )
 }
 
 const validationResults = allUsers.map(user => ({
@@ -74,4 +74,7 @@ const validationResults = allUsers.map(user => ({
 export const validUsers = allUsers.filter(user => validateUser(user));
 
 // console.log(validationResults);
-// console.log(validUsers);
+
+// fs.writeFile('validUsers.js', `export const validUsers = ${JSON.stringify(validUsers, null, 2)};`, (err) => {
+//     if (err) throw err;
+// });
