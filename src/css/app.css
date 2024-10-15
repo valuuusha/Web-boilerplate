@@ -148,18 +148,20 @@ hr{
 }
 
 .teachers{
-    display: flex;
-    gap: 2vw;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 0vw;
     margin-top: 2vw;
+    justify-items: center;
 }
 
 .teacher-card {
     text-align: center;
-    width: 10vw;
+    width: 80%;
 }
 
 .teacher-card img, .favourites img {
+    object-fit: cover;
     width: 8vw;
     height: 8vw;
     border: 0.3vw solid #f99589;
@@ -589,7 +591,7 @@ span {
 }
 
 #close-add-popup {
-    background-color: transparent; /* Прозорий фон */
+    background-color: transparent;
     color: white;
     font-size: 1.5vw;
     text-decoration: none;
@@ -604,5 +606,23 @@ span {
 }
 
 #close-add-popup:hover {
-    color: #f75c49; /* Зміна кольору при наведенні */
+    color: #f75c49; 
+}
+.show-button {
+    margin: 2vw;
+    display: flex;
+    justify-content: center;
+}
+
+#show-more {
+    margin: 0.8rem;
+    border: none;
+    color: #999999;
+    background-color: white;
+    font-size: 1rem;
+
+}
+#show-more:hover {
+    color: #f75c49;
+    text-decoration: underline;
 }

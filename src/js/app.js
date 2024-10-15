@@ -4,13 +4,16 @@ const filterForm = document.getElementById("filters");
 const teacherContainer = document.getElementById('teacher-grid');
 const favoritesContainer = document.querySelector('.favourites .teachers');
 const popup = document.getElementById('teacher-popup');
-const apiLink = 'https://randomuser.me/api/?results=50';
+const apiLink = 'https://randomuser.me/api/?results=55';
+const apiLinkMore = 'https://randomuser.me/api/?results=13';
+const apiLinkOne = 'https://randomuser.me/api/?results=1';
+let displayUsers = 10;
 
 
 function renderTeachers(teachers) {
     teacherContainer.innerHTML = ''; 
 
-    teachers.slice(0, 10).forEach(teacher => {
+    teachers.slice(0, displayUsers).forEach(teacher => { 
         const teacherCard = document.createElement('article');
         teacherCard.classList.add('teacher-card');
 
@@ -368,15 +371,28 @@ form.addEventListener('submit', (event) => {
     };
 
     if (validateUser(newTeacher)) {
-        addFields(newTeacher);
-
+        
+        // fetch('http://localhost:3000/teachers', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(newTeacher)
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     console.log('User successfully added:', data);
+        //     apiTeachers.push(newTeacher);
+        //     renderTeachers(apiTeachers); 
+        // })
+        // .catch(error => {
+        //     console.error('Error while adding user:', error);
+        // });
         apiTeachers.push(newTeacher);
+        renderTeachers(apiTeachers);
 
         form.reset();
         popupAdd.style.display = 'none';
-
-        renderTeachers(apiTeachers);
-        // console.log(newTeacher);
 
     } else {
         alert("Error: check your input data");
@@ -398,3 +414,41 @@ fetch(apiLink)
         renderFavorites(apiTeachers);
     })
     .catch(error => console.error('Error fetching users:', error));
+    
+
+// SHOW MORE TEACHERS BUTTON 
+
+const showMoreButton = document.getElementById("show-more");
+
+function fetchMoreUsers() {
+    return fetch(apiLinkMore)
+        .then(response => response.json())
+        .then(async data => {
+            let newUsers = data.results
+                .map(formatUsers)
+                .map(addFields)
+                .filter(validateUser);
+
+            apiTeachers = [...apiTeachers, ...newUsers];
+            return newUsers;
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            return [];
+        });
+}
+
+showMoreButton.addEventListener('click', async () => {
+    if (displayUsers >= apiTeachers.length) {
+
+        const newUsers = await fetchMoreUsers();
+        renderTeachers(apiTeachers);
+        renderFavorites(apiTeachers);
+        displayUsers += newUsers.length;
+    } else {
+        
+        displayUsers += 10;
+        renderTeachers(apiTeachers.slice(0, displayUsers));
+        renderFavorites(apiTeachers.slice(0, displayUsers));
+    }
+});
