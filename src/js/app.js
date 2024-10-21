@@ -1,3 +1,4 @@
+import { validate } from 'webpack';
 import { addFields, formatUsers} from './format-data.js';
 
 const filterForm = document.getElementById("filters");
@@ -371,29 +372,31 @@ form.addEventListener('submit', (event) => {
     };
 
     if (validateUser(newTeacher)) {
-        
-        // fetch('http://localhost:3000/teachers', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(newTeacher)
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     console.log('User successfully added:', data);
-        //     apiTeachers.push(newTeacher);
-        //     renderTeachers(apiTeachers); 
-        // })
-        // .catch(error => {
-        //     console.error('Error while adding user:', error);
-        // });
-        apiTeachers.push(newTeacher);
-        renderTeachers(apiTeachers);
+        fetch('http://localhost:3000/teachers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newTeacher)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    console.error('Error details:', error);
+                    throw new Error('Failed to add teacher');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Teacher added:', data);
+            apiTeachers.push(data);
+            renderTeachers(apiTeachers);
 
-        form.reset();
-        popupAdd.style.display = 'none';
-
+            form.reset();
+            popupAdd.style.display = 'none';
+        })
+        .catch(error => console.error('Error adding teacher:', error));
     } else {
         alert("Error: check your input data");
     }
@@ -410,8 +413,7 @@ fetch(apiLink)
         .map(addFields)
         .filter(validateUser);
 
-        renderTeachers(apiTeachers);
-        renderFavorites(apiTeachers);
+    fetchLocalTeachers();
     })
     .catch(error => console.error('Error fetching users:', error));
     
@@ -452,3 +454,23 @@ showMoreButton.addEventListener('click', async () => {
         renderFavorites(apiTeachers.slice(0, displayUsers));
     }
 });
+
+function fetchLocalTeachers() {
+    return fetch('/db.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.teachers || !Array.isArray(data.teachers)) {
+                throw new Error('Invalid structure of db.json');
+            }
+
+            apiTeachers = [...apiTeachers, ...data.teachers];
+            renderTeachers(apiTeachers);
+            renderFavorites(apiTeachers);
+        })
+        .catch(error => console.error('Error fetching the JSON:', error));
+}
