@@ -1,18 +1,20 @@
-import { validUsers as teachers} from './validUsers.js';
-import { addFields} from './format-data.js';
-
-
+import { validate } from 'webpack';
+import { addFields, formatUsers} from './format-data.js';
 
 const filterForm = document.getElementById("filters");
 const teacherContainer = document.getElementById('teacher-grid');
 const favoritesContainer = document.querySelector('.favourites .teachers');
 const popup = document.getElementById('teacher-popup');
+const apiLink = 'https://randomuser.me/api/?results=55';
+const apiLinkMore = 'https://randomuser.me/api/?results=13';
+const apiLinkOne = 'https://randomuser.me/api/?results=1';
+let displayUsers = 10;
 
 
 function renderTeachers(teachers) {
     teacherContainer.innerHTML = ''; 
 
-    teachers.slice(0, 10).forEach(teacher => {
+    teachers.slice(0, displayUsers).forEach(teacher => { 
         const teacherCard = document.createElement('article');
         teacherCard.classList.add('teacher-card');
 
@@ -31,7 +33,7 @@ function renderTeachers(teachers) {
     });
 }
 
-function renderFavorites() {
+function renderFavorites(teachers) {
     favoritesContainer.innerHTML = '';
 
     teachers
@@ -72,28 +74,11 @@ function showTeacherInfo(teacher) {
     favoriteStar.onclick = () => {
         favoriteStar.classList.toggle("full");
         teacher.favorite = favoriteStar.classList.contains("full");
-        updateFavorites();
-        renderFavorites();
+
+        renderFavorites(apiTeachers);
     };
 
     popup.style.display = 'flex';
-}
-
-function updateFavorites() {
-    localStorage.setItem('teachers', JSON.stringify(teachers));
-}
-
-function loadFavorites() {
-    const storedTeachers = localStorage.getItem('teachers');
-    if (storedTeachers) {
-        const parsedTeachers = JSON.parse(storedTeachers);
-        parsedTeachers.forEach((storedTeacher) => {
-            const teacher = teachers.find(t => t.id === storedTeacher.id);
-            if (teacher) {
-                teacher.favorite = storedTeacher.favorite;
-            }
-        });
-    }
 }
 
 
@@ -107,7 +92,7 @@ filterForm.addEventListener("change", function() {
     const gender = document.getElementById("filter-gender").value;
     const favoritesOnly = document.getElementById("filter-favorite").checked;
 
-    const filteredTeachers = teachers.filter(teacher => {
+    const filteredTeachers = apiTeachers.filter(teacher => {
         const countryMatch = !country || teacher.country === country;
 
         let ageMatch = true;
@@ -125,9 +110,6 @@ filterForm.addEventListener("change", function() {
     renderTeachers(filteredTeachers);
 });
 
-loadFavorites(); 
-renderTeachers(teachers);
-renderFavorites();
 
 //  TABLE & SORTING
 
@@ -141,9 +123,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function waitForData() {
 
-        if (teachers.length > 0) {
+        if (apiTeachers.length > 0) {
             
-            renderTableData(teachers);
+            renderTableData(apiTeachers);
         } else {
             setTimeout(waitForData, 1000);
         }
@@ -199,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
             pageButton.addEventListener('click', () => {
                 currentPage = pageNum;
-                renderTableData(teachers);
+                renderTableData(apiTeachers);
             });
     
             return pageButton;
@@ -245,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function sortTable(column, type = 'string', direction = 'asc') {
 
-        const sortedData = [...teachers].sort((a, b) => {
+        const sortedData = [...apiTeachers].sort((a, b) => {
             let valueA = getColumnValue(a, column);
             let valueB = getColumnValue(b, column);
 
@@ -308,13 +290,13 @@ const searchButton = document.querySelector('.search');
 searchButton.addEventListener('click', (event) => {
     event.preventDefault();
     const searchValue = searchInput.value.toLowerCase(); 
-    const matchedTeachers = findMatchesByValue(teachers, searchValue); 
+    const matchedTeachers = findMatchesByValue(apiTeachers, searchValue); 
 
     renderTeachers(matchedTeachers);
 });
 
-function findMatchesByValue(teachers, searchValue) {
-    return teachers.filter(teacher => {
+function findMatchesByValue(apiTeachers, searchValue) {
+    return apiTeachers.filter(teacher => {
         const nameMatch = teacher.full_name.toLowerCase().includes(searchValue);
         const noteMatch = teacher.note.toLowerCase().includes(searchValue);
         const ageMatch = String(teacher.age).includes(searchValue);
@@ -331,15 +313,16 @@ const popupAdd = document.getElementById('teach-add-popup');
 const form = document.getElementById('addteacher-form');
 import { validateUser } from './validate-data.js';
 
-openPopupButton.addEventListener('click', () => {
-    popupAdd.style.display = 'block';
-});
+if (openPopupButton && closePopupButton && popupAdd) {
+    openPopupButton.addEventListener('click', () => {
+        popupAdd.style.display = 'block';
+    });
 
-
-closePopupButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    popupAdd.style.display = 'none';
-});
+    closePopupButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        popupAdd.style.display = 'none';
+    });
+}
 
 window.addEventListener('click', (event) => {
     if (event.target === popupAdd) {
@@ -389,20 +372,105 @@ form.addEventListener('submit', (event) => {
     };
 
     if (validateUser(newTeacher)) {
-        addFields(newTeacher);
+        fetch('http://localhost:3000/teachers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newTeacher)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    console.error('Error details:', error);
+                    throw new Error('Failed to add teacher');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Teacher added:', data);
+            apiTeachers.push(data);
+            renderTeachers(apiTeachers);
 
-        teachers.push(newTeacher);
-
-        form.reset();
-        popupAdd.style.display = 'none';
-
-        renderTeachers(teachers);
-        console.log(newTeacher);
-
+            form.reset();
+            popupAdd.style.display = 'none';
+        })
+        .catch(error => console.error('Error adding teacher:', error));
     } else {
         alert("Error: check your input data");
     }
 });
 
+// FETCH API TEACHERS
+export let apiTeachers = [];
 
+fetch(apiLink)
+    .then(response => response.json())
+    .then(data => {
+        apiTeachers = data.results
+        .map(formatUsers)
+        .map(addFields)
+        .filter(validateUser);
 
+    fetchLocalTeachers();
+    })
+    .catch(error => console.error('Error fetching users:', error));
+    
+
+// SHOW MORE TEACHERS BUTTON 
+
+const showMoreButton = document.getElementById("show-more");
+
+function fetchMoreUsers() {
+    return fetch(apiLinkMore)
+        .then(response => response.json())
+        .then(async data => {
+            let newUsers = data.results
+                .map(formatUsers)
+                .map(addFields)
+                .filter(validateUser);
+
+            apiTeachers = [...apiTeachers, ...newUsers];
+            return newUsers;
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            return [];
+        });
+}
+
+showMoreButton.addEventListener('click', async () => {
+    if (displayUsers >= apiTeachers.length) {
+
+        const newUsers = await fetchMoreUsers();
+        renderTeachers(apiTeachers);
+        renderFavorites(apiTeachers);
+        displayUsers += newUsers.length;
+    } else {
+        
+        displayUsers += 10;
+        renderTeachers(apiTeachers.slice(0, displayUsers));
+        renderFavorites(apiTeachers.slice(0, displayUsers));
+    }
+});
+
+function fetchLocalTeachers() {
+    return fetch('/db.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.teachers || !Array.isArray(data.teachers)) {
+                throw new Error('Invalid structure of db.json');
+            }
+
+            apiTeachers = [...apiTeachers, ...data.teachers];
+            renderTeachers(apiTeachers);
+            renderFavorites(apiTeachers);
+        })
+        .catch(error => console.error('Error fetching the JSON:', error));
+}

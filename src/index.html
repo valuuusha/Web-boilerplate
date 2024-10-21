@@ -11,8 +11,11 @@
       <title>Teachfinder</title>
 
       <link rel="stylesheet" href="./css/app.css">
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
       <script type="module" src="/src/js/app.js"></script>
       <script type="module" src="./js/filter-users.js"></script>
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
    </head>
 
@@ -224,6 +227,12 @@
                         <p id="popup-bio"></p>
                      </section>
                   </div>
+
+                  <div class="map-toggle-button">
+                     <button id="toggle-map" class="toggle-map">Toggle Map</button>
+                 </div>
+                 
+                 <div id="popup-map" class="popup-map" style="width: 100%; height: 200px; display:none;"></div>
                    
                </section>
            </div>
@@ -231,6 +240,11 @@
             <section class="teachers" id="teacher-grid">
          
             </section>
+      
+            <div class="show-button">
+               <button type="button" id="show-more">Show more...</button>
+            </div>
+
          </section>
 
          <hr/>
@@ -370,7 +384,91 @@
                   </ul>
                </nav>
       
-               <button class="add-teacher">Add teacher</button>
+               <button class="add-teacher" id="open-teach-add-popup">Add teacher</button>
+
+               <div id="teach-add-popup" class="popup" style="display: none;">
+
+                  <div class="wrapper">
+
+                     <div class="add-teacher-label">
+
+                        <label for="wrapper">Add Teacher</label>
+                        <a id="close-add-popup" href="#">×</a>
+                     </div>
+              
+                     <form id="addteacher-form">
+                        <div class="name">
+                           <label for="name">Name</label>
+                           <input type="text" id="name" placeholder="Enter name">
+                        </div>
+            
+                        <div class="speciality">
+                           <label for="speciality">Speciality</label>
+                           <select id="speciality">
+                                 <option value="mathematics">Mathematics</option>
+                                 <option value="chess">Chess</option>
+                                 <option value="vocal">Vocal</option>
+                                 <option value="computer science">Computer Science</option>
+                                 <option value="biology">Biology</option>
+                                 <option value="physics">Physics</option>
+                                 <option value="chemistry">Chemistry</option>
+                           </select>
+                        </div>
+            
+                        <div class="country">
+                           <label for="country">Country</label>
+                           <select id="country">
+                                 <option value="ukraine">Ukraine</option>
+                                 <option value="usa">USA</option>
+                                 <option value="denmark">Denmark</option>
+                                 <option value="china">China</option>
+                                 <option value="india">India</option>
+                           </select>
+                        </div>
+            
+                        <div class="city">
+                           <label for="city">City</label>
+                           <input type="text" id="city">
+                        </div>
+            
+                        <div class="email">
+                           <label for="email">Email</label>
+                           <input type="email" id="email">
+                        </div>
+            
+                        <div class="phone">
+                           <label for="phone">Phone</label>
+                           <input type="tel" id="phone">
+                        </div>
+            
+                        <div class="birthdate">
+                           <label for="birthdate">Date of birth</label>
+                           <input type="date" id="birthdate">
+                        </div>
+            
+                        <div class="sex">
+                           <label>Sex</label>
+                           <div class="sex-options">
+                                 <label for="male">Male</label>
+                                 <input type="radio" id="male" name="sex">
+                                 <label for="female">Female</label>
+                                 <input type="radio" id="female" name="sex">
+                           </div>
+                        </div>
+            
+                        <div class="bgcolor">
+                           <label for="bgcolor">Background color</label>
+                           <input type="color" id="bgcolor">
+                        </div>
+            
+                        <div class="notes">
+                           <label for="notes">Notes (optional)</label>
+                           <textarea id="notes"></textarea>
+                        </div>
+            
+                        <button class="button" id="add-button" type="submit">Add</button>
+                     </form>
+                  </div>
             </div>
       </footer>
    </div>

@@ -36,14 +36,19 @@ function getCountryCodeByName(countryName) {
     return countries.getAlpha2Code(countryName, 'en');
 }
 
-function validatePhoneNum(phoneNum, country) {
-    const countryCode = getCountryCodeByName(country);
+// function validatePhoneNum(phoneNum, country) {
+//     const countryCode = getCountryCodeByName(country);
 
-    if (!countryCode) {
-        return false;
-    }
+//     if (!countryCode) {
+//         return false;
+//     }
 
-    return isValidNumber(phoneNum, countryCode);
+//     return isValidNumber(phoneNum, countryCode);
+// }
+
+function validatePhoneNum(phoneNum) {
+    const regex = /^[0-9()+-]+$/;
+    return regex.test(phoneNum);
 }
 
 function validateNoteField(note) {
@@ -61,7 +66,7 @@ export function validateUser(user) {
         validateStringField(user.city) &&
         validateEmail(user.email) &&
         validateAgeField(user.age) &&
-        // validatePhoneNum(user.phone, user.country) &&
+        // validatePhoneNum(user.phone) &&
         validateNoteField(user.note)
     )
 }
