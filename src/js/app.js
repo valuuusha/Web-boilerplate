@@ -1,4 +1,3 @@
-import { validate } from 'webpack';
 import { addFields, formatUsers} from './format-data.js';
 
 const filterForm = document.getElementById("filters");
@@ -8,6 +7,8 @@ const popup = document.getElementById('teacher-popup');
 const apiLink = 'https://randomuser.me/api/?results=55';
 const apiLinkMore = 'https://randomuser.me/api/?results=13';
 const apiLinkOne = 'https://randomuser.me/api/?results=1';
+const popupMapDiv = document.getElementById('popup-map');
+const toggleMapButton = document.getElementById('toggle-map');
 let displayUsers = 10;
 
 
@@ -56,16 +57,14 @@ function renderFavorites(teachers) {
         });
 }
 
-
 function showTeacherInfo(teacher) {
-
     document.getElementById("popup-picture").src = teacher.picture_large;
     document.getElementById("popup-name").textContent = teacher.full_name;
     document.getElementById("popup-course").textContent = teacher.course;
     document.getElementById("popup-city-country").textContent = `${teacher.city}, ${teacher.country}`;
     document.getElementById("popup-age-gender").textContent = `${teacher.age}, ${teacher.gender}`;
-    document.getElementById("popup-email").textContent = teacher.email; 
-    document.getElementById("popup-phone").textContent = teacher.phone; 
+    document.getElementById("popup-email").textContent = teacher.email;
+    document.getElementById("popup-phone").textContent = teacher.phone;
     document.getElementById("popup-bio").textContent = teacher.note;
 
     const favoriteStar = document.getElementById('popup-favorite');
@@ -74,16 +73,68 @@ function showTeacherInfo(teacher) {
     favoriteStar.onclick = () => {
         favoriteStar.classList.toggle("full");
         teacher.favorite = favoriteStar.classList.contains("full");
-
         renderFavorites(apiTeachers);
     };
 
     popup.style.display = 'flex';
+
+    let mapVisible = false;
+    let map; 
+
+    if (popupMapDiv._leaflet_id) {
+        popupMapDiv._leaflet_id = null;
+    }
+    if (map) {
+        map.remove();
+        map = null;
+    }
+
+    toggleMapButton.onclick = (event) => {
+        event.preventDefault();
+        
+        let latitude = teacher.coordinates.Latitude;
+        let longitude = teacher.coordinates.Longitude;
+
+        if (mapVisible) {
+            popupMapDiv.style.display = 'none';
+            mapVisible = false;
+            if (map) {
+                map.remove();
+            }
+        } else {
+            popupMapDiv.style.display = 'block';
+            map = L.map(popupMapDiv).setView([latitude, longitude], 10);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup(teacher.full_name)
+                .openPopup();
+
+            popupMapDiv.style.display = 'block';
+            mapVisible = true;
+        }
+    };
+
+    const closePopupButton = document.getElementById('close-popup');
+    closePopupButton.onclick = () => {
+        popup.style.display = 'none';
+        if (map) {
+            map.remove();
+        }
+        popupMapDiv.style.display = 'none';
+        mapVisible = false;
+    };
 }
 
 
+
+
 document.getElementById('close-popup').addEventListener('click', function() {
-    document.getElementById('teacher-popup').style.display = 'none';
+    popup.style.display = 'none';
 });
 
 filterForm.addEventListener("change", function() {
@@ -368,7 +419,12 @@ form.addEventListener('submit', (event) => {
         gender: sex,
         bg_color: bgcolor,
         note: notes,
-        age: age  
+        age: age,
+        coordinates: {
+            latitude: 50.4501,  
+            longitude: 30.5234,
+        },
+        favorite: false,  
     };
 
     if (validateUser(newTeacher)) {

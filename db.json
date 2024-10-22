@@ -1,4 +1,61 @@
 {
   "teachers": [
+    {
+      "id": "dd87",
+      "full_name": "Low Kee",
+      "course": "computer science",
+      "country": "ukraine",
+      "city": "Kyiv",
+      "email": "ajkshd@asnj.com",
+      "phone": "39845328947",
+      "b_date": "2000-05-05",
+      "gender": "female",
+      "bg_color": "#b5b0d0",
+      "note": "NJsikfnj",
+      "age": 24,
+      "coordinates": {
+        "latitude": 50.4501,
+        "longitude": 30.5234
+      },
+      "favorite": false
+    },
+    {
+      "id": "68ed",
+      "full_name": "Lee Keifer",
+      "course": "mathematics",
+      "country": "ukraine",
+      "city": "Kyiv",
+      "email": "alslsl@gmail.com",
+      "phone": "39845328947",
+      "b_date": "2000-05-05",
+      "gender": "male",
+      "bg_color": "#000000",
+      "note": "Njiskfuh",
+      "age": 24,
+      "coordinates": {
+        "latitude": 50.4501,
+        "longitude": 30.5234
+      },
+      "favorite": false
+    },
+    {
+      "id": "b6d8",
+      "full_name": "Hah Ha",
+      "course": "mathematics",
+      "country": "ukraine",
+      "city": "Kharkiv",
+      "email": "osloooo@gmail.com",
+      "phone": "325354732837",
+      "b_date": "2000-05-05",
+      "gender": "male",
+      "bg_color": "#000000",
+      "note": "Ndisfj",
+      "age": 24,
+      "coordinates": {
+        "latitude": 50.4501,
+        "longitude": 30.5234
+      },
+      "favorite": false
+    }
   ]
 }
