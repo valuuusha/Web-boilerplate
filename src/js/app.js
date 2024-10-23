@@ -9,6 +9,8 @@ const apiLinkMore = 'https://randomuser.me/api/?results=13';
 const apiLinkOne = 'https://randomuser.me/api/?results=1';
 const popupMapDiv = document.getElementById('popup-map');
 const toggleMapButton = document.getElementById('toggle-map');
+const tableBody = document.getElementById('tbody');
+const tableNavigation = document.getElementById('table-nav');
 let displayUsers = 10;
 
 
@@ -167,8 +169,6 @@ filterForm.addEventListener("change", function() {
 document.addEventListener('DOMContentLoaded', function() {
     searchInput.value = '';
 
-    const tableBody = document.getElementById('tbody');
-    const tableNavigation = document.getElementById('table-nav');
     const itemsPerPage = 10;
     let currentPage = 1;
 
@@ -332,6 +332,172 @@ document.addEventListener('DOMContentLoaded', function() {
         return sortDirection[column];
     }
 });
+// PIECHART STATISTICS
+
+const checkDataReady = setInterval(() => {
+    if (apiTeachers && apiTeachers.length > 0) {
+        clearInterval(checkDataReady);
+        setupPieCharts(); 
+    }
+}, 10);
+
+const createChart = (chartCtx, chartLabels, chartData, title) => {
+    const data = {
+        labels: chartLabels,
+        datasets: [{
+            label: title,
+            data: chartData,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 205, 86, 0.6)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 205, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: title,
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} (${percentage}%)`;
+                        },
+                    },
+                    bodyFont: {
+                        size: 14
+                    }
+                }
+            }
+        }
+    };
+
+    return new Chart(chartCtx, config);
+};
+
+const getAgeGroup = (age) => {
+    if (age >= 18 && age <= 25) {
+        return '18-25';
+    } else if (age >= 26 && age <= 35) {
+        return '26-35';
+    } else if (age >= 36 && age <= 45) {
+        return '36-45';
+    } else if (age >= 46 && age <= 65) {
+        return '46-65';
+    } else {
+        return '65+';
+    }
+};
+
+const preparePieData = (column) => {
+    const chartLabels = [];
+    const chartData = [];
+    const categoryCount = {};
+
+    apiTeachers.forEach(teacher => {
+        let value;
+        switch (column) {
+            case 'speciality':
+                value = teacher.course;
+                break;
+            case 'age':
+                value = getAgeGroup(teacher.age);;
+                break;
+            case 'gender':
+                value = teacher.gender;
+                break;
+            case 'nationality':
+                value = teacher.country;
+                break;
+        }
+
+        categoryCount[value] = (categoryCount[value] || 0) + 1;
+    });
+
+    for (const [key, count] of Object.entries(categoryCount)) {
+        chartLabels.push(key);
+        chartData.push(count);
+    }
+
+    return { chartLabels, chartData };
+};
+
+const setupPieCharts = () => {
+    const ageData = preparePieData('age');
+    const genderData = preparePieData('gender');
+    const courseData = preparePieData('speciality');
+    const countryData = preparePieData('nationality');
+
+    const specialityCtx = document.getElementById('specialityChart').getContext('2d');
+    createChart(specialityCtx, courseData.chartLabels, courseData.chartData, 'Speciality');
+
+    const ageCtx = document.getElementById('ageChart').getContext('2d');
+    createChart(ageCtx, ageData.chartLabels, ageData.chartData, 'Age');
+
+    const genderCtx = document.getElementById('genderChart').getContext('2d');
+    createChart(genderCtx, genderData.chartLabels, genderData.chartData, 'Gender');
+
+    const nationalityCtx = document.getElementById('nationalityChart').getContext('2d');
+    createChart(nationalityCtx, countryData.chartLabels, countryData.chartData, 'Nationality');
+};
+
+const tableContainer = document.getElementById('statictics-table');
+const chartContainer = document.getElementById('piechart');
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === "Tab") { 
+        event.preventDefault();
+        const tableDisplay = window.getComputedStyle(tableContainer).display;
+
+        if (tableDisplay === 'table' || tableDisplay === '') { 
+            tableContainer.style.display = 'none';
+            chartContainer.style.display = 'flex';
+            tableNavigation.style.display = 'none';
+        } else {
+            tableContainer.style.display = 'table'; 
+            chartContainer.style.display = 'none';
+            tableNavigation.style.display = 'flex';
+        }
+    }
+}); 
 
 // SEARCH
 
@@ -355,6 +521,30 @@ function findMatchesByValue(apiTeachers, searchValue) {
         return nameMatch || noteMatch || ageMatch;
     });
 }
+
+const updateCharts = () => {
+    const updatedAgeData = prepareChartData('age');
+    const updatedGenderData = prepareChartData('gender');
+    const updatedCourseData = prepareChartData('speciality');
+    const updatedCountryData = prepareChartData('nationality');
+
+    ageChart.data.labels = updatedAgeData.labels;
+    ageChart.data.datasets[0].data = updatedAgeData.data;
+    ageChart.update();
+
+    genderChart.data.labels = updatedGenderData.labels;
+    genderChart.data.datasets[0].data = updatedGenderData.data;
+    genderChart.update();
+
+    courseChart.data.labels = updatedCourseData.labels;
+    courseChart.data.datasets[0].data = updatedCourseData.data;
+    courseChart.update();
+
+    countryChart.data.labels = updatedCountryData.labels;
+    countryChart.data.datasets[0].data = updatedCountryData.data;
+    countryChart.update();
+};
+
 
 // ADDING NEW TEACHERS
 
@@ -435,12 +625,11 @@ form.addEventListener('submit', (event) => {
             },
             body: JSON.stringify(newTeacher)
         })
-        .then(response => {
+        .then(async response => {
             if (!response.ok) {
-                return response.json().then(error => {
-                    console.error('Error details:', error);
-                    throw new Error('Failed to add teacher');
-                });
+                const error = await response.json();
+                console.error('Error details:', error);
+                throw new Error('Failed to add teacher');
             }
             return response.json();
         })
@@ -448,8 +637,9 @@ form.addEventListener('submit', (event) => {
             console.log('Teacher added:', data);
             apiTeachers.push(data);
             renderTeachers(apiTeachers);
-
             form.reset();
+
+            updateCharts();
             popupAdd.style.display = 'none';
         })
         .catch(error => console.error('Error adding teacher:', error));
