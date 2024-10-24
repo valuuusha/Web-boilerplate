@@ -17,7 +17,8 @@
         "latitude": 50.4501,
         "longitude": 30.5234
       },
-      "favorite": false
+      "favorite": false,
+      "picture_large": "./images/default_user_picture.jpg"
     },
     {
       "id": "68ed",
@@ -36,7 +37,8 @@
         "latitude": 50.4501,
         "longitude": 30.5234
       },
-      "favorite": false
+      "favorite": false,
+      "picture_large": "./images/default_user_picture.jpg"
     },
     {
       "id": "b6d8",
@@ -55,7 +57,28 @@
         "latitude": 50.4501,
         "longitude": 30.5234
       },
-      "favorite": false
+      "favorite": false,
+      "picture_large": "./images/default_user_picture.jpg"
+    },
+    {
+      "id": "b63f",
+      "full_name": "Lee Chen",
+      "course": "mathematics",
+      "country": "ukraine",
+      "city": "Kyiv",
+      "email": "hsf@fkd.com",
+      "phone": "9825729457",
+      "b_date": "1990-05-05",
+      "gender": "male",
+      "bg_color": "#000000",
+      "note": "Njfdk",
+      "age": 34,
+      "coordinates": {
+        "latitude": 50.4501,
+        "longitude": 30.5234
+      },
+      "favorite": false,  
+      "picture_large": "./images/default_user_picture.jpg"
     }
   ]
 }

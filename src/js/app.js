@@ -11,6 +11,7 @@ const popupMapDiv = document.getElementById('popup-map');
 const toggleMapButton = document.getElementById('toggle-map');
 const tableBody = document.getElementById('tbody');
 const tableNavigation = document.getElementById('table-nav');
+const addButton = document.getElementById('add-button');
 let displayUsers = 10;
 
 
@@ -341,6 +342,34 @@ const checkDataReady = setInterval(() => {
     }
 }, 10);
 
+
+let ageChart, genderChart, specialityChart, nationalityChart;
+
+const setupPieCharts = () => {
+
+    if (ageChart) ageChart.destroy();
+    if (genderChart) genderChart.destroy();
+    if (specialityChart) specialityChart.destroy();
+    if (nationalityChart) nationalityChart.destroy();
+
+    const ageData = preparePieData('age');
+    const genderData = preparePieData('gender');
+    const courseData = preparePieData('speciality');
+    const countryData = preparePieData('nationality');
+
+    const ageCtx = document.getElementById('ageChart').getContext('2d');
+    ageChart = createChart(ageCtx, ageData.chartLabels, ageData.chartData, 'Age');
+
+    const genderCtx = document.getElementById('genderChart').getContext('2d');
+    genderChart = createChart(genderCtx, genderData.chartLabels, genderData.chartData, 'Gender');
+
+    const specialityCtx = document.getElementById('specialityChart').getContext('2d');
+    specialityChart = createChart(specialityCtx, courseData.chartLabels, courseData.chartData, 'Speciality');
+
+    const nationalityCtx = document.getElementById('nationalityChart').getContext('2d');
+    nationalityChart = createChart(nationalityCtx, countryData.chartLabels, countryData.chartData, 'Nationality');
+};
+
 const createChart = (chartCtx, chartLabels, chartData, title) => {
     const data = {
         labels: chartLabels,
@@ -413,20 +442,6 @@ const createChart = (chartCtx, chartLabels, chartData, title) => {
     return new Chart(chartCtx, config);
 };
 
-const getAgeGroup = (age) => {
-    if (age >= 18 && age <= 25) {
-        return '18-25';
-    } else if (age >= 26 && age <= 35) {
-        return '26-35';
-    } else if (age >= 36 && age <= 45) {
-        return '36-45';
-    } else if (age >= 46 && age <= 65) {
-        return '46-65';
-    } else {
-        return '65+';
-    }
-};
-
 const preparePieData = (column) => {
     const chartLabels = [];
     const chartData = [];
@@ -460,23 +475,18 @@ const preparePieData = (column) => {
     return { chartLabels, chartData };
 };
 
-const setupPieCharts = () => {
-    const ageData = preparePieData('age');
-    const genderData = preparePieData('gender');
-    const courseData = preparePieData('speciality');
-    const countryData = preparePieData('nationality');
-
-    const specialityCtx = document.getElementById('specialityChart').getContext('2d');
-    createChart(specialityCtx, courseData.chartLabels, courseData.chartData, 'Speciality');
-
-    const ageCtx = document.getElementById('ageChart').getContext('2d');
-    createChart(ageCtx, ageData.chartLabels, ageData.chartData, 'Age');
-
-    const genderCtx = document.getElementById('genderChart').getContext('2d');
-    createChart(genderCtx, genderData.chartLabels, genderData.chartData, 'Gender');
-
-    const nationalityCtx = document.getElementById('nationalityChart').getContext('2d');
-    createChart(nationalityCtx, countryData.chartLabels, countryData.chartData, 'Nationality');
+const getAgeGroup = (age) => {
+    if (age >= 18 && age <= 25) {
+        return '18-25';
+    } else if (age >= 26 && age <= 35) {
+        return '26-35';
+    } else if (age >= 36 && age <= 45) {
+        return '36-45';
+    } else if (age >= 46 && age <= 65) {
+        return '46-65';
+    } else {
+        return '65+';
+    }
 };
 
 const tableContainer = document.getElementById('statictics-table');
@@ -522,29 +532,6 @@ function findMatchesByValue(apiTeachers, searchValue) {
     });
 }
 
-const updateCharts = () => {
-    const updatedAgeData = prepareChartData('age');
-    const updatedGenderData = prepareChartData('gender');
-    const updatedCourseData = prepareChartData('speciality');
-    const updatedCountryData = prepareChartData('nationality');
-
-    ageChart.data.labels = updatedAgeData.labels;
-    ageChart.data.datasets[0].data = updatedAgeData.data;
-    ageChart.update();
-
-    genderChart.data.labels = updatedGenderData.labels;
-    genderChart.data.datasets[0].data = updatedGenderData.data;
-    genderChart.update();
-
-    courseChart.data.labels = updatedCourseData.labels;
-    courseChart.data.datasets[0].data = updatedCourseData.data;
-    courseChart.update();
-
-    countryChart.data.labels = updatedCountryData.labels;
-    countryChart.data.datasets[0].data = updatedCountryData.data;
-    countryChart.update();
-};
-
 
 // ADDING NEW TEACHERS
 
@@ -571,8 +558,7 @@ window.addEventListener('click', (event) => {
     }
 });
 
-
-form.addEventListener('submit', (event) => {
+const handleSubmit = (event) => {
     event.preventDefault();
 
     function calculateAge(birthdate) {
@@ -615,6 +601,7 @@ form.addEventListener('submit', (event) => {
             longitude: 30.5234,
         },
         favorite: false,  
+        picture_large: "./images/default_user_picture.jpg",
     };
 
     if (validateUser(newTeacher)) {
@@ -639,14 +626,16 @@ form.addEventListener('submit', (event) => {
             renderTeachers(apiTeachers);
             form.reset();
 
-            updateCharts();
+            setupPieCharts();
             popupAdd.style.display = 'none';
         })
         .catch(error => console.error('Error adding teacher:', error));
     } else {
         alert("Error: check your input data");
     }
-});
+}
+
+addButton.addEventListener('click', handleSubmit);
 
 // FETCH API TEACHERS
 export let apiTeachers = [];
@@ -655,14 +644,14 @@ fetch(apiLink)
     .then(response => response.json())
     .then(data => {
         apiTeachers = data.results
-        .map(formatUsers)
-        .map(addFields)
-        .filter(validateUser);
+            .map(formatUsers)
+            .map(addFields)
+            .filter(validateUser);
 
-    fetchLocalTeachers();
+        fetchLocalTeachers();
     })
     .catch(error => console.error('Error fetching users:', error));
-    
+
 
 // SHOW MORE TEACHERS BUTTON 
 
@@ -692,14 +681,16 @@ showMoreButton.addEventListener('click', async () => {
         const newUsers = await fetchMoreUsers();
         renderTeachers(apiTeachers);
         renderFavorites(apiTeachers);
+        setupPieCharts();
         displayUsers += newUsers.length;
     } else {
-        
+
         displayUsers += 10;
         renderTeachers(apiTeachers.slice(0, displayUsers));
         renderFavorites(apiTeachers.slice(0, displayUsers));
     }
 });
+
 
 function fetchLocalTeachers() {
     return fetch('/db.json')
