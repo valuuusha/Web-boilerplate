@@ -1,4 +1,24 @@
 {
   "teachers": [
+    {
+      "id": "dd87",
+      "full_name": "Low Kee",
+      "course": "Computer science",
+      "country": "Ukraine",
+      "city": "Kyiv",
+      "email": "ajkshd@asnj.com",
+      "phone": "39845328947",
+      "b_date": "2000-05-05",
+      "gender": "Female",
+      "bg_color": "#b5b0d0",
+      "note": "NJsikfnj",
+      "age": 24,
+      "coordinates": {
+        "latitude": 50.4501,
+        "longitude": 30.5234
+      },
+      "favorite": false,
+      "picture_large": "./images/default_user_picture.jpg"
+    }
   ]
 }

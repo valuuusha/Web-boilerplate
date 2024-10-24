@@ -1,4 +1,3 @@
-import { validate } from 'webpack';
 import { addFields, formatUsers} from './format-data.js';
 
 const filterForm = document.getElementById("filters");
@@ -8,6 +7,11 @@ const popup = document.getElementById('teacher-popup');
 const apiLink = 'https://randomuser.me/api/?results=55';
 const apiLinkMore = 'https://randomuser.me/api/?results=13';
 const apiLinkOne = 'https://randomuser.me/api/?results=1';
+const popupMapDiv = document.getElementById('popup-map');
+const toggleMapButton = document.getElementById('toggle-map');
+const tableBody = document.getElementById('tbody');
+const tableNavigation = document.getElementById('table-nav');
+const addButton = document.getElementById('add-button');
 let displayUsers = 10;
 
 
@@ -56,17 +60,42 @@ function renderFavorites(teachers) {
         });
 }
 
-
 function showTeacherInfo(teacher) {
 
-    document.getElementById("popup-picture").src = teacher.picture_large;
-    document.getElementById("popup-name").textContent = teacher.full_name;
-    document.getElementById("popup-course").textContent = teacher.course;
-    document.getElementById("popup-city-country").textContent = `${teacher.city}, ${teacher.country}`;
-    document.getElementById("popup-age-gender").textContent = `${teacher.age}, ${teacher.gender}`;
-    document.getElementById("popup-email").textContent = teacher.email; 
-    document.getElementById("popup-phone").textContent = teacher.phone; 
-    document.getElementById("popup-bio").textContent = teacher.note;
+    function calculateDaysUntilBday(birthdate) {
+        const today = dayjs();
+        let nextBirthday = dayjs(birthdate).year(today.year());
+    
+        if (today.isAfter(nextBirthday)) {
+            nextBirthday = nextBirthday.add(1, 'year');
+        }
+    
+        const daysUntilBirthday = nextBirthday.diff(today, 'day');
+        return daysUntilBirthday;
+    }
+
+    const fieldsToUpdate = {
+        "popup-picture": teacher.picture_large,
+        "popup-name": teacher.full_name,
+        "popup-course": teacher.course,
+        "popup-city-country": `${teacher.city}, ${teacher.country}`,
+        "popup-age-gender": `${teacher.age}, ${teacher.gender}`,
+        "popup-email": teacher.email,
+        "popup-phone": teacher.phone,
+        "popup-bio": teacher.note
+    };
+
+    const daysUntilBday = calculateDaysUntilBday(teacher.b_date);
+    document.getElementById("days-til-birthday").textContent = `Days until birthday: ${daysUntilBday}`;
+
+    _.forEach(fieldsToUpdate, (value, id) => {
+        const element = document.getElementById(id);
+        if (id === "popup-picture") {
+            element.src = value;
+        } else {
+            element.textContent = value;
+        }
+    });
 
     const favoriteStar = document.getElementById('popup-favorite');
     favoriteStar.classList.toggle("full", teacher.favorite);
@@ -74,17 +103,65 @@ function showTeacherInfo(teacher) {
     favoriteStar.onclick = () => {
         favoriteStar.classList.toggle("full");
         teacher.favorite = favoriteStar.classList.contains("full");
-
         renderFavorites(apiTeachers);
     };
 
     popup.style.display = 'flex';
+
+    let mapVisible = false;
+    let map; 
+
+    if (popupMapDiv._leaflet_id || map) {
+        popupMapDiv._leaflet_id = null;
+        if (map) map.remove();
+    }
+
+    toggleMapButton.onclick = (event) => {
+        event.preventDefault();
+        
+        let latitude = teacher.coordinates.Latitude;
+        let longitude = teacher.coordinates.Longitude;
+
+        if (mapVisible) {
+            popupMapDiv.style.display = 'none';
+            mapVisible = false;
+            if (map) {
+                map.remove();
+            }
+        } else {
+            popupMapDiv.style.display = 'block';
+            map = L.map(popupMapDiv).setView([latitude, longitude], 10);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup(teacher.full_name)
+                .openPopup();
+
+            popupMapDiv.style.display = 'block';
+            mapVisible = true;
+        }
+    };
+
+    const closePopupButton = document.getElementById('close-popup');
+    closePopupButton.onclick = () => {
+        popup.style.display = 'none';
+        if (map) {
+            map.remove();
+        }
+        popupMapDiv.style.display = 'none';
+        mapVisible = false;
+    };
 }
 
-
 document.getElementById('close-popup').addEventListener('click', function() {
-    document.getElementById('teacher-popup').style.display = 'none';
+    popup.style.display = 'none';
 });
+
+//FILTER TEACHERS
 
 filterForm.addEventListener("change", function() {
     const country = document.getElementById("filter-country").value;
@@ -92,14 +169,13 @@ filterForm.addEventListener("change", function() {
     const gender = document.getElementById("filter-gender").value;
     const favoritesOnly = document.getElementById("filter-favorite").checked;
 
-    const filteredTeachers = apiTeachers.filter(teacher => {
+    const filteredTeachers = _.filter(apiTeachers, teacher => {
         const countryMatch = !country || teacher.country === country;
 
-        let ageMatch = true;
-        if (ageRange) {
+        const ageMatch = ageRange ? (() => {
             const [minAge, maxAge] = ageRange.split('-').map(Number);
-            ageMatch = teacher.age >= minAge && teacher.age <= maxAge;
-        }
+            return _.inRange(teacher.age, minAge, maxAge + 1);
+        })() : true;
 
         const genderMatch = !gender || teacher.gender === gender;
         const favoritesMatch = !favoritesOnly || teacher.favorite;
@@ -111,20 +187,17 @@ filterForm.addEventListener("change", function() {
 });
 
 
+
 //  TABLE & SORTING
 
 document.addEventListener('DOMContentLoaded', function() {
     searchInput.value = '';
 
-    const tableBody = document.getElementById('tbody');
-    const tableNavigation = document.getElementById('table-nav');
     const itemsPerPage = 10;
     let currentPage = 1;
 
     function waitForData() {
-
-        if (apiTeachers.length > 0) {
-            
+        if (!_.isEmpty(apiTeachers)) {
             renderTableData(apiTeachers);
         } else {
             setTimeout(waitForData, 1000);
@@ -135,9 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderTableData(data) {
         tableBody.innerHTML = ''; 
 
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const currentData = data.slice(startIndex, endIndex);
+        const currentData = _.slice(data, (currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
         currentData.forEach((teacher) => {
 
@@ -226,20 +297,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     function sortTable(column, type = 'string', direction = 'asc') {
-
-        const sortedData = [...apiTeachers].sort((a, b) => {
-            let valueA = getColumnValue(a, column);
-            let valueB = getColumnValue(b, column);
-
-            if (type === 'number') {
-                valueA = parseInt(valueA);
-                valueB = parseInt(valueB);
-            }
-
-            return direction === 'asc' ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
-        });
-
-        currentPage = 1; 
+        const sortedData = _.orderBy(apiTeachers, [teacher => getColumnValue(teacher, column)], [direction]);
+        currentPage = 1;
         renderTableData(sortedData);
     }
 
@@ -281,6 +340,181 @@ document.addEventListener('DOMContentLoaded', function() {
         return sortDirection[column];
     }
 });
+// PIECHART STATISTICS
+
+const checkDataReady = setInterval(() => {
+    if (apiTeachers && apiTeachers.length > 0) {
+        clearInterval(checkDataReady);
+        setupPieCharts(); 
+    }
+}, 10);
+
+
+let ageChart, genderChart, specialityChart, nationalityChart;
+
+const setupPieCharts = () => {
+
+    if (ageChart) ageChart.destroy();
+    if (genderChart) genderChart.destroy();
+    if (specialityChart) specialityChart.destroy();
+    if (nationalityChart) nationalityChart.destroy();
+
+    const ageData = preparePieData('age');
+    const genderData = preparePieData('gender');
+    const courseData = preparePieData('speciality');
+    const countryData = preparePieData('nationality');
+
+    const ageCtx = document.getElementById('ageChart').getContext('2d');
+    ageChart = createChart(ageCtx, ageData.chartLabels, ageData.chartData, 'Age');
+
+    const genderCtx = document.getElementById('genderChart').getContext('2d');
+    genderChart = createChart(genderCtx, genderData.chartLabels, genderData.chartData, 'Gender');
+
+    const specialityCtx = document.getElementById('specialityChart').getContext('2d');
+    specialityChart = createChart(specialityCtx, courseData.chartLabels, courseData.chartData, 'Speciality');
+
+    const nationalityCtx = document.getElementById('nationalityChart').getContext('2d');
+    nationalityChart = createChart(nationalityCtx, countryData.chartLabels, countryData.chartData, 'Nationality');
+};
+
+const createChart = (chartCtx, chartLabels, chartData, title) => {
+    const data = {
+        labels: chartLabels,
+        datasets: [{
+            label: title,
+            data: chartData,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 205, 86, 0.6)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 205, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: title,
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} (${percentage}%)`;
+                        },
+                    },
+                    bodyFont: {
+                        size: 14
+                    }
+                }
+            }
+        }
+    };
+
+    return new Chart(chartCtx, config);
+};
+
+const preparePieData = (column) => {
+    const chartLabels = [];
+    const chartData = [];
+    const categoryCount = {};
+
+    apiTeachers.forEach(teacher => {
+        let value;
+        switch (column) {
+            case 'speciality':
+                value = teacher.course;
+                break;
+            case 'age':
+                value = getAgeGroup(teacher.age);;
+                break;
+            case 'gender':
+                value = teacher.gender;
+                break;
+            case 'nationality':
+                value = teacher.country;
+                break;
+        }
+
+        categoryCount[value] = (categoryCount[value] || 0) + 1;
+    });
+
+    for (const [key, count] of Object.entries(categoryCount)) {
+        chartLabels.push(key);
+        chartData.push(count);
+    }
+
+    return { chartLabels, chartData };
+};
+
+const getAgeGroup = (age) => {
+    if (age >= 18 && age <= 25) {
+        return '18-25';
+    } else if (age >= 26 && age <= 35) {
+        return '26-35';
+    } else if (age >= 36 && age <= 45) {
+        return '36-45';
+    } else if (age >= 46 && age <= 65) {
+        return '46-65';
+    } else {
+        return '65+';
+    }
+};
+
+const tableContainer = document.getElementById('statictics-table');
+const chartContainer = document.getElementById('piechart');
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === "Tab") { 
+        event.preventDefault();
+        const tableDisplay = window.getComputedStyle(tableContainer).display;
+
+        if (tableDisplay === 'table' || tableDisplay === '') { 
+            tableContainer.style.display = 'none';
+            chartContainer.style.display = 'flex';
+            tableNavigation.style.display = 'none';
+        } else {
+            tableContainer.style.display = 'table'; 
+            chartContainer.style.display = 'none';
+            tableNavigation.style.display = 'flex';
+        }
+    }
+}); 
 
 // SEARCH
 
@@ -296,14 +530,16 @@ searchButton.addEventListener('click', (event) => {
 });
 
 function findMatchesByValue(apiTeachers, searchValue) {
-    return apiTeachers.filter(teacher => {
-        const nameMatch = teacher.full_name.toLowerCase().includes(searchValue);
-        const noteMatch = teacher.note.toLowerCase().includes(searchValue);
-        const ageMatch = String(teacher.age).includes(searchValue);
-
-        return nameMatch || noteMatch || ageMatch;
+    return _.filter(apiTeachers, teacher => {
+        return _.some([
+            teacher.full_name.toLowerCase(),
+            teacher.note.toLowerCase(),
+            String(teacher.age)
+        ], field => _.includes(field, searchValue));
     });
 }
+
+
 
 // ADDING NEW TEACHERS
 
@@ -330,8 +566,11 @@ window.addEventListener('click', (event) => {
     }
 });
 
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
 
-form.addEventListener('submit', (event) => {
+const handleSubmit = (event) => {
     event.preventDefault();
 
     function calculateAge(birthdate) {
@@ -346,13 +585,13 @@ form.addEventListener('submit', (event) => {
     }
 
     const name = document.getElementById('name').value;
-    const speciality = document.getElementById('speciality').value;
-    const country = document.getElementById('country').value;
-    const city = document.getElementById('city').value;
+    const speciality = capitalizeFirstLetter(document.getElementById('speciality').value);
+    const country = capitalizeFirstLetter(document.getElementById('country').value);
+    const city = capitalizeFirstLetter(document.getElementById('city').value);
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const birthdate = document.getElementById('birthdate').value;
-    const sex = document.querySelector('input[name="sex"]:checked')?.id;
+    const sex = capitalizeFirstLetter(document.querySelector('input[name="sex"]:checked')?.id || '');
     const bgcolor = document.getElementById('bgcolor').value;
     const notes = document.getElementById('notes').value;
     const age = calculateAge(birthdate);
@@ -368,7 +607,13 @@ form.addEventListener('submit', (event) => {
         gender: sex,
         bg_color: bgcolor,
         note: notes,
-        age: age  
+        age: age,
+        coordinates: {
+            latitude: 50.4501,  
+            longitude: 30.5234,
+        },
+        favorite: false,  
+        picture_large: "./images/default_user_picture.jpg",
     };
 
     if (validateUser(newTeacher)) {
@@ -379,12 +624,11 @@ form.addEventListener('submit', (event) => {
             },
             body: JSON.stringify(newTeacher)
         })
-        .then(response => {
+        .then(async response => {
             if (!response.ok) {
-                return response.json().then(error => {
-                    console.error('Error details:', error);
-                    throw new Error('Failed to add teacher');
-                });
+                const error = await response.json();
+                console.error('Error details:', error);
+                throw new Error('Failed to add teacher');
             }
             return response.json();
         })
@@ -392,15 +636,18 @@ form.addEventListener('submit', (event) => {
             console.log('Teacher added:', data);
             apiTeachers.push(data);
             renderTeachers(apiTeachers);
-
             form.reset();
+
+            setupPieCharts();
             popupAdd.style.display = 'none';
         })
         .catch(error => console.error('Error adding teacher:', error));
     } else {
         alert("Error: check your input data");
     }
-});
+}
+
+addButton.addEventListener('click', handleSubmit);
 
 // FETCH API TEACHERS
 export let apiTeachers = [];
@@ -409,14 +656,14 @@ fetch(apiLink)
     .then(response => response.json())
     .then(data => {
         apiTeachers = data.results
-        .map(formatUsers)
-        .map(addFields)
-        .filter(validateUser);
+            .map(formatUsers)
+            .map(addFields)
+            .filter(validateUser);
 
-    fetchLocalTeachers();
+        fetchLocalTeachers();
     })
     .catch(error => console.error('Error fetching users:', error));
-    
+
 
 // SHOW MORE TEACHERS BUTTON 
 
@@ -446,14 +693,16 @@ showMoreButton.addEventListener('click', async () => {
         const newUsers = await fetchMoreUsers();
         renderTeachers(apiTeachers);
         renderFavorites(apiTeachers);
+        setupPieCharts();
         displayUsers += newUsers.length;
     } else {
-        
+
         displayUsers += 10;
         renderTeachers(apiTeachers.slice(0, displayUsers));
         renderFavorites(apiTeachers.slice(0, displayUsers));
     }
 });
+
 
 function fetchLocalTeachers() {
     return fetch('/db.json')
