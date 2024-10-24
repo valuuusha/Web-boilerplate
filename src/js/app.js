@@ -61,6 +61,19 @@ function renderFavorites(teachers) {
 }
 
 function showTeacherInfo(teacher) {
+
+    function calculateDaysUntilBday(birthdate) {
+        const today = dayjs();
+        let nextBirthday = dayjs(birthdate).year(today.year());
+    
+        if (today.isAfter(nextBirthday)) {
+            nextBirthday = nextBirthday.add(1, 'year');
+        }
+    
+        const daysUntilBirthday = nextBirthday.diff(today, 'day');
+        return daysUntilBirthday;
+    }
+
     const fieldsToUpdate = {
         "popup-picture": teacher.picture_large,
         "popup-name": teacher.full_name,
@@ -71,6 +84,9 @@ function showTeacherInfo(teacher) {
         "popup-phone": teacher.phone,
         "popup-bio": teacher.note
     };
+
+    const daysUntilBday = calculateDaysUntilBday(teacher.b_date);
+    document.getElementById("days-til-birthday").textContent = `Days until birthday: ${daysUntilBday}`;
 
     _.forEach(fieldsToUpdate, (value, id) => {
         const element = document.getElementById(id);
