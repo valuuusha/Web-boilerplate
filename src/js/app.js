@@ -61,14 +61,25 @@ function renderFavorites(teachers) {
 }
 
 function showTeacherInfo(teacher) {
-    document.getElementById("popup-picture").src = teacher.picture_large;
-    document.getElementById("popup-name").textContent = teacher.full_name;
-    document.getElementById("popup-course").textContent = teacher.course;
-    document.getElementById("popup-city-country").textContent = `${teacher.city}, ${teacher.country}`;
-    document.getElementById("popup-age-gender").textContent = `${teacher.age}, ${teacher.gender}`;
-    document.getElementById("popup-email").textContent = teacher.email;
-    document.getElementById("popup-phone").textContent = teacher.phone;
-    document.getElementById("popup-bio").textContent = teacher.note;
+    const fieldsToUpdate = {
+        "popup-picture": teacher.picture_large,
+        "popup-name": teacher.full_name,
+        "popup-course": teacher.course,
+        "popup-city-country": `${teacher.city}, ${teacher.country}`,
+        "popup-age-gender": `${teacher.age}, ${teacher.gender}`,
+        "popup-email": teacher.email,
+        "popup-phone": teacher.phone,
+        "popup-bio": teacher.note
+    };
+
+    _.forEach(fieldsToUpdate, (value, id) => {
+        const element = document.getElementById(id);
+        if (id === "popup-picture") {
+            element.src = value;
+        } else {
+            element.textContent = value;
+        }
+    });
 
     const favoriteStar = document.getElementById('popup-favorite');
     favoriteStar.classList.toggle("full", teacher.favorite);
@@ -84,12 +95,9 @@ function showTeacherInfo(teacher) {
     let mapVisible = false;
     let map; 
 
-    if (popupMapDiv._leaflet_id) {
+    if (popupMapDiv._leaflet_id || map) {
         popupMapDiv._leaflet_id = null;
-    }
-    if (map) {
-        map.remove();
-        map = null;
+        if (map) map.remove();
     }
 
     toggleMapButton.onclick = (event) => {
@@ -133,12 +141,11 @@ function showTeacherInfo(teacher) {
     };
 }
 
-
-
-
 document.getElementById('close-popup').addEventListener('click', function() {
     popup.style.display = 'none';
 });
+
+//FILTER TEACHERS
 
 filterForm.addEventListener("change", function() {
     const country = document.getElementById("filter-country").value;
@@ -146,14 +153,13 @@ filterForm.addEventListener("change", function() {
     const gender = document.getElementById("filter-gender").value;
     const favoritesOnly = document.getElementById("filter-favorite").checked;
 
-    const filteredTeachers = apiTeachers.filter(teacher => {
+    const filteredTeachers = _.filter(apiTeachers, teacher => {
         const countryMatch = !country || teacher.country === country;
 
-        let ageMatch = true;
-        if (ageRange) {
+        const ageMatch = ageRange ? (() => {
             const [minAge, maxAge] = ageRange.split('-').map(Number);
-            ageMatch = teacher.age >= minAge && teacher.age <= maxAge;
-        }
+            return _.inRange(teacher.age, minAge, maxAge + 1);
+        })() : true;
 
         const genderMatch = !gender || teacher.gender === gender;
         const favoritesMatch = !favoritesOnly || teacher.favorite;
@@ -165,6 +171,7 @@ filterForm.addEventListener("change", function() {
 });
 
 
+
 //  TABLE & SORTING
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -174,9 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
 
     function waitForData() {
-
-        if (apiTeachers.length > 0) {
-            
+        if (!_.isEmpty(apiTeachers)) {
             renderTableData(apiTeachers);
         } else {
             setTimeout(waitForData, 1000);
@@ -187,9 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderTableData(data) {
         tableBody.innerHTML = ''; 
 
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const currentData = data.slice(startIndex, endIndex);
+        const currentData = _.slice(data, (currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
         currentData.forEach((teacher) => {
 
@@ -278,20 +281,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     function sortTable(column, type = 'string', direction = 'asc') {
-
-        const sortedData = [...apiTeachers].sort((a, b) => {
-            let valueA = getColumnValue(a, column);
-            let valueB = getColumnValue(b, column);
-
-            if (type === 'number') {
-                valueA = parseInt(valueA);
-                valueB = parseInt(valueB);
-            }
-
-            return direction === 'asc' ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
-        });
-
-        currentPage = 1; 
+        const sortedData = _.orderBy(apiTeachers, [teacher => getColumnValue(teacher, column)], [direction]);
+        currentPage = 1;
         renderTableData(sortedData);
     }
 
@@ -523,14 +514,15 @@ searchButton.addEventListener('click', (event) => {
 });
 
 function findMatchesByValue(apiTeachers, searchValue) {
-    return apiTeachers.filter(teacher => {
-        const nameMatch = teacher.full_name.toLowerCase().includes(searchValue);
-        const noteMatch = teacher.note.toLowerCase().includes(searchValue);
-        const ageMatch = String(teacher.age).includes(searchValue);
-
-        return nameMatch || noteMatch || ageMatch;
+    return _.filter(apiTeachers, teacher => {
+        return _.some([
+            teacher.full_name.toLowerCase(),
+            teacher.note.toLowerCase(),
+            String(teacher.age)
+        ], field => _.includes(field, searchValue));
     });
 }
+
 
 
 // ADDING NEW TEACHERS
@@ -558,6 +550,10 @@ window.addEventListener('click', (event) => {
     }
 });
 
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -573,13 +569,13 @@ const handleSubmit = (event) => {
     }
 
     const name = document.getElementById('name').value;
-    const speciality = document.getElementById('speciality').value;
-    const country = document.getElementById('country').value;
-    const city = document.getElementById('city').value;
+    const speciality = capitalizeFirstLetter(document.getElementById('speciality').value);
+    const country = capitalizeFirstLetter(document.getElementById('country').value);
+    const city = capitalizeFirstLetter(document.getElementById('city').value);
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const birthdate = document.getElementById('birthdate').value;
-    const sex = document.querySelector('input[name="sex"]:checked')?.id;
+    const sex = capitalizeFirstLetter(document.querySelector('input[name="sex"]:checked')?.id || '');
     const bgcolor = document.getElementById('bgcolor').value;
     const notes = document.getElementById('notes').value;
     const age = calculateAge(birthdate);

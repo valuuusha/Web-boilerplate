@@ -3,13 +3,13 @@
     {
       "id": "dd87",
       "full_name": "Low Kee",
-      "course": "computer science",
-      "country": "ukraine",
+      "course": "Computer science",
+      "country": "Ukraine",
       "city": "Kyiv",
       "email": "ajkshd@asnj.com",
       "phone": "39845328947",
       "b_date": "2000-05-05",
-      "gender": "female",
+      "gender": "Female",
       "bg_color": "#b5b0d0",
       "note": "NJsikfnj",
       "age": 24,
@@ -18,66 +18,6 @@
         "longitude": 30.5234
       },
       "favorite": false,
-      "picture_large": "./images/default_user_picture.jpg"
-    },
-    {
-      "id": "68ed",
-      "full_name": "Lee Keifer",
-      "course": "mathematics",
-      "country": "ukraine",
-      "city": "Kyiv",
-      "email": "alslsl@gmail.com",
-      "phone": "39845328947",
-      "b_date": "2000-05-05",
-      "gender": "male",
-      "bg_color": "#000000",
-      "note": "Njiskfuh",
-      "age": 24,
-      "coordinates": {
-        "latitude": 50.4501,
-        "longitude": 30.5234
-      },
-      "favorite": false,
-      "picture_large": "./images/default_user_picture.jpg"
-    },
-    {
-      "id": "b6d8",
-      "full_name": "Hah Ha",
-      "course": "mathematics",
-      "country": "ukraine",
-      "city": "Kharkiv",
-      "email": "osloooo@gmail.com",
-      "phone": "325354732837",
-      "b_date": "2000-05-05",
-      "gender": "male",
-      "bg_color": "#000000",
-      "note": "Ndisfj",
-      "age": 24,
-      "coordinates": {
-        "latitude": 50.4501,
-        "longitude": 30.5234
-      },
-      "favorite": false,
-      "picture_large": "./images/default_user_picture.jpg"
-    },
-    {
-      "id": "b63f",
-      "full_name": "Lee Chen",
-      "course": "mathematics",
-      "country": "ukraine",
-      "city": "Kyiv",
-      "email": "hsf@fkd.com",
-      "phone": "9825729457",
-      "b_date": "1990-05-05",
-      "gender": "male",
-      "bg_color": "#000000",
-      "note": "Njfdk",
-      "age": 34,
-      "coordinates": {
-        "latitude": 50.4501,
-        "longitude": 30.5234
-      },
-      "favorite": false,  
       "picture_large": "./images/default_user_picture.jpg"
     }
   ]
